@@ -16,7 +16,7 @@ func GetFundInfoByCode(code string) (string, string) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
+	if res.StatusCode != http.StatusOK {
 		panic(res.StatusCode)
 	}
 
