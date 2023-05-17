@@ -1,2 +1,415 @@
-date (22-07-29 15:00)
-num 0.6567
+---------------- simulate init ----------------
+player:
+- hold count: 0
+- hold value: 0
+- cost: 0
+- release: 1000000
+- result: 0
+---------------- simulating ----------------
+---------------- day 0 ----------------
+- info
+	- begin 10000
+	- end 9100
+	- percent -9
+- trade
+	- buy count 10 with value 9100
+- player
+	- hold count 10
+	- hold value 9100
+	- day value 91000
+	- release 909000
+	- cost 91000
+---------------- day 1 ----------------
+- info
+	- begin 9100
+	- end 8281
+	- percent -9
+- trade
+	- buy count 10 with value 8281
+- player
+	- hold count 20
+	- hold value 8690
+	- day value 165620
+	- release 826190
+	- cost 173810
+---------------- day 2 ----------------
+- info
+	- begin 8281
+	- end 8363
+	- percent 1
+- trade
+	- no trade
+- player
+	- hold count 20
+	- hold value 8690
+	- day value 167260
+	- release 826190
+	- cost 173810
+---------------- day 3 ----------------
+- info
+	- begin 8363
+	- end 8530
+	- percent 2
+- trade
+	- no trade
+- player
+	- hold count 20
+	- hold value 8690
+	- day value 170600
+	- release 826190
+	- cost 173810
+---------------- day 4 ----------------
+- info
+	- begin 8530
+	- end 8360
+	- percent -2
+- trade
+	- no trade
+- player
+	- hold count 20
+	- hold value 8690
+	- day value 167200
+	- release 826190
+	- cost 173810
+---------------- day 5 ----------------
+- info
+	- begin 8360
+	- end 8610
+	- percent 3
+- trade
+	- no trade
+- player
+	- hold count 20
+	- hold value 8690
+	- day value 172200
+	- release 826190
+	- cost 173810
+---------------- day 6 ----------------
+- info
+	- begin 8610
+	- end 8266
+	- percent -4
+- trade
+	- no trade
+- player
+	- hold count 20
+	- hold value 8690
+	- day value 165320
+	- release 826190
+	- cost 173810
+---------------- day 7 ----------------
+- info
+	- begin 8266
+	- end 9092
+	- percent 10
+- trade
+	- sell count 10 with value 9092
+- player
+	- hold count 10
+	- hold value 8289
+	- day value 90920
+	- release 917110
+	- cost 82890
+---------------- day 8 ----------------
+- info
+	- begin 9092
+	- end 8274
+	- percent -9
+- trade
+	- buy count 10 with value 8274
+- player
+	- hold count 20
+	- hold value 8281
+	- day value 165480
+	- release 834370
+	- cost 165630
+---------------- day 9 ----------------
+- info
+	- begin 8274
+	- end 7944
+	- percent -4
+- trade
+	- no trade
+- player
+	- hold count 20
+	- hold value 8281
+	- day value 158880
+	- release 834370
+	- cost 165630
+---------------- day 10 ----------------
+- info
+	- begin 7944
+	- end 8579
+	- percent 8
+- trade
+	- sell count 10 with value 8579
+- player
+	- hold count 10
+	- hold value 7984
+	- day value 85790
+	- release 920160
+	- cost 79840
+---------------- day 11 ----------------
+- info
+	- begin 8579
+	- end 8322
+	- percent -3
+- trade
+	- no trade
+- player
+	- hold count 10
+	- hold value 7984
+	- day value 83220
+	- release 920160
+	- cost 79840
+---------------- day 12 ----------------
+- info
+	- begin 8322
+	- end 7990
+	- percent -4
+- trade
+	- no trade
+- player
+	- hold count 10
+	- hold value 7984
+	- day value 79900
+	- release 920160
+	- cost 79840
+---------------- day 13 ----------------
+- info
+	- begin 7990
+	- end 7911
+	- percent -1
+- trade
+	- no trade
+- player
+	- hold count 10
+	- hold value 7984
+	- day value 79110
+	- release 920160
+	- cost 79840
+---------------- day 14 ----------------
+- info
+	- begin 7911
+	- end 8148
+	- percent 3
+- trade
+	- no trade
+- player
+	- hold count 10
+	- hold value 7984
+	- day value 81480
+	- release 920160
+	- cost 79840
+---------------- day 15 ----------------
+- info
+	- begin 8148
+	- end 7741
+	- percent -5
+- trade
+	- buy count 10 with value 7741
+- player
+	- hold count 20
+	- hold value 7862
+	- day value 154820
+	- release 842750
+	- cost 157250
+---------------- day 16 ----------------
+- info
+	- begin 7741
+	- end 7200
+	- percent -7
+- trade
+	- buy count 10 with value 7200
+- player
+	- hold count 30
+	- hold value 7641
+	- day value 216000
+	- release 770750
+	- cost 229250
+---------------- day 17 ----------------
+- info
+	- begin 7200
+	- end 6912
+	- percent -4
+- trade
+	- no trade
+- player
+	- hold count 30
+	- hold value 7641
+	- day value 207360
+	- release 770750
+	- cost 229250
+---------------- day 18 ----------------
+- info
+	- begin 6912
+	- end 6981
+	- percent 1
+- trade
+	- no trade
+- player
+	- hold count 30
+	- hold value 7641
+	- day value 209430
+	- release 770750
+	- cost 229250
+---------------- day 19 ----------------
+- info
+	- begin 6981
+	- end 7330
+	- percent 5
+- trade
+	- no trade
+- player
+	- hold count 30
+	- hold value 7641
+	- day value 219900
+	- release 770750
+	- cost 229250
+---------------- day 20 ----------------
+- info
+	- begin 7330
+	- end 7403
+	- percent 1
+- trade
+	- no trade
+- player
+	- hold count 30
+	- hold value 7641
+	- day value 222090
+	- release 770750
+	- cost 229250
+---------------- day 21 ----------------
+- info
+	- begin 7403
+	- end 6959
+	- percent -6
+- trade
+	- buy count 10 with value 6959
+- player
+	- hold count 40
+	- hold value 7471
+	- day value 278360
+	- release 701160
+	- cost 298840
+---------------- day 22 ----------------
+- info
+	- begin 6959
+	- end 6751
+	- percent -3
+- trade
+	- no trade
+- player
+	- hold count 40
+	- hold value 7471
+	- day value 270040
+	- release 701160
+	- cost 298840
+---------------- day 23 ----------------
+- info
+	- begin 6751
+	- end 7156
+	- percent 6
+- trade
+	- sell count 10 with value 7156
+- player
+	- hold count 30
+	- hold value 7576
+	- day value 214680
+	- release 772720
+	- cost 227280
+---------------- day 24 ----------------
+- info
+	- begin 7156
+	- end 6656
+	- percent -7
+- trade
+	- buy count 10 with value 6656
+- player
+	- hold count 40
+	- hold value 7346
+	- day value 266240
+	- release 706160
+	- cost 293840
+---------------- day 25 ----------------
+- info
+	- begin 6656
+	- end 6789
+	- percent 2
+- trade
+	- no trade
+- player
+	- hold count 40
+	- hold value 7346
+	- day value 271560
+	- release 706160
+	- cost 293840
+---------------- day 26 ----------------
+- info
+	- begin 6789
+	- end 6314
+	- percent -7
+- trade
+	- buy count 10 with value 6314
+- player
+	- hold count 50
+	- hold value 7139
+	- day value 315700
+	- release 643020
+	- cost 356980
+---------------- day 27 ----------------
+- info
+	- begin 6314
+	- end 6566
+	- percent 4
+- trade
+	- no trade
+- player
+	- hold count 50
+	- hold value 7139
+	- day value 328300
+	- release 643020
+	- cost 356980
+---------------- day 28 ----------------
+- info
+	- begin 6566
+	- end 6894
+	- percent 5
+- trade
+	- no trade
+- player
+	- hold count 50
+	- hold value 7139
+	- day value 344700
+	- release 643020
+	- cost 356980
+---------------- day 29 ----------------
+- info
+	- begin 6894
+	- end 7583
+	- percent 10
+- trade
+	- sell count 10 with value 7583
+- player
+	- hold count 40
+	- hold value 7028
+	- day value 303320
+	- release 718850
+	- cost 281150
+---------------- simulate force clear ----------------
+---------------- simulate end ----------------
+player:
+- hold count: 0
+- hold value: 0
+- cost: -22170
+- release: 1022170
+- result: 22170
+---------------- simulate statistics ----------------
+records: 30 days
+- up: 14 days, 61%
+- down: 16 days, 84%
+---------------- simulate statistics ----------------
+simulate: 100000
+- up: 1 times, max 22170, days percents 46%, cumulative 61, avg 4
+- down: 0 times, max 0, days percents 53%, cumulative 84 avg 5
+- equal: 0
