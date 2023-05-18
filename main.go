@@ -2,19 +2,28 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
+	"os"
 	"sync"
 	"time"
+
+	"github.com/go-echarts/go-echarts/v2/charts"
+	"github.com/go-echarts/go-echarts/v2/components"
+	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
 type player struct {
-	holdCount         int
-	holdValue         int
-	cost              int
-	release           int
-	tradeWhilePercent int
-	tradeCount        int
-	forceClear        bool
+	holdCount           int
+	holdValue           int
+	cost                int
+	release             int
+	tradeWhilePercent   int
+	tradeCount          int
+	tradeTimes          int
+	lastTradeDay        int
+	maxNonTradeDuration [2]int
+	forceClear          bool
 }
 
 type tradeRecord struct {
@@ -31,6 +40,39 @@ type simulateStatistics struct {
 	cumulativeDownPercent int
 }
 
+type chartStatistics struct {
+	title    string
+	subTitle string
+	xAxis    []interface{}
+	yAxisMap map[string][]interface{}
+}
+
+func (cs *chartStatistics) makeChart() {
+	line := charts.NewLine()
+	line.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{Title: cs.title, Subtitle: cs.subTitle}),
+	)
+	line.SetXAxis(cs.xAxis)
+	for series, yData := range cs.yAxisMap {
+		yAxis := make([]opts.LineData, 0, len(yData))
+		for _, data := range yData {
+			yAxis = append(yAxis, opts.LineData{Value: data})
+		}
+		line.AddSeries(series, yAxis)
+	}
+
+	page := components.NewPage()
+	page.AddCharts(line)
+	f, err := os.Create("page.html")
+	if err != nil {
+		panic(err)
+	}
+	err = page.Render(io.MultiWriter(f))
+	if err != nil {
+		panic(err)
+	}
+}
+
 type totalStatistics struct {
 	locker                sync.Mutex
 	wg                    sync.WaitGroup
@@ -44,6 +86,7 @@ type totalStatistics struct {
 	maxDown               int
 	downDays              int
 	downCumulativePercent int
+	maxNonTradeDuration   []int
 }
 
 func getDeltaPercent(deltaPercentRange int) int {
@@ -114,19 +157,33 @@ func (p *player) clear(tradeValue int) {
 
 func simulate(ts *totalStatistics, output bool) {
 	var (
-		day       int = 30
-		initValue int = 10000 // 100.00 * 100
-		p             = &player{
-			holdCount:         0,
-			holdValue:         0,
-			cost:              0,
-			release:           1000000,
-			tradeWhilePercent: 5,
-			tradeCount:        10,
-			forceClear:        true,
+		day        int = 30
+		initValue  int = 10000 // 100.00 * 100
+		upWeight   int = 50
+		downWeight int = 50
+		p              = &player{
+			holdCount:           0,
+			holdValue:           0,
+			cost:                0,
+			release:             1000000,
+			tradeWhilePercent:   3,
+			tradeCount:          10,
+			tradeTimes:          0,
+			maxNonTradeDuration: [...]int{-1, -1},
+			forceClear:          true,
 		}
-		deltaPercentRange int = 10
+		deltaPercentRange int = 5
 		// tradeSlice        []*record = make([]*record, day)
+		cs = &chartStatistics{
+			title:    fmt.Sprintf("%v days simulation", day),
+			subTitle: fmt.Sprintf("%v%% percent up/down %v%%", upWeight*100/(upWeight+downWeight), deltaPercentRange),
+			xAxis:    []interface{}{0},
+			yAxisMap: map[string][]interface{}{
+				"end":          {initValue},
+				"deltaValue":   {0},
+				"deltaPercent": {0},
+			},
+		}
 	)
 
 	if output {
@@ -159,6 +216,20 @@ func simulate(ts *totalStatistics, output bool) {
 		begin, end := dayValue, dayValue+deltaValue
 		dayValue = end
 		record := p.trade(deltaPercent, dayValue)
+		if record == nil {
+			if p.maxNonTradeDuration[0] == -1 && p.maxNonTradeDuration[1] == -1 {
+				p.maxNonTradeDuration[0] = d
+			} else if p.maxNonTradeDuration[0] != -1 && p.maxNonTradeDuration[1] == -1 {
+				p.maxNonTradeDuration[1] = d
+			} else if p.maxNonTradeDuration[0] != -1 && p.maxNonTradeDuration[1] != -1 {
+				if p.maxNonTradeDuration[1]-p.maxNonTradeDuration[0] < d-p.lastTradeDay {
+					p.maxNonTradeDuration[0] = p.lastTradeDay + 1
+					p.maxNonTradeDuration[1] = d
+				}
+			}
+		} else {
+			p.lastTradeDay = d
+		}
 		if output {
 			fmt.Printf("---------------- day %v ----------------\n", d)
 			fmt.Printf("- info\n")
@@ -181,6 +252,12 @@ func simulate(ts *totalStatistics, output bool) {
 			fmt.Printf("\t- day value %v\n", p.holdCount*dayValue)
 			fmt.Printf("\t- release %v\n", p.release)
 			fmt.Printf("\t- cost %v\n", p.cost)
+
+			// charts
+			cs.xAxis = append(cs.xAxis, d+1)
+			cs.yAxisMap["end"] = append(cs.yAxisMap["end"], end)
+			cs.yAxisMap["deltaValue"] = append(cs.yAxisMap["deltaValue"], deltaValue)
+			cs.yAxisMap["deltaPercent"] = append(cs.yAxisMap["deltaPercent"], deltaPercent)
 		}
 	}
 
@@ -203,6 +280,7 @@ func simulate(ts *totalStatistics, output bool) {
 		fmt.Printf("records: %v days\n", ss.days)
 		fmt.Printf("- up: %v days, %v%%\n", ss.upDays, ss.cumulativeUpPercent)
 		fmt.Printf("- down: %v days, %v%%\n", ss.downDays, ss.cumulativeDownPercent)
+		cs.makeChart()
 	}
 
 	ts.locker.Lock()
@@ -223,6 +301,12 @@ func simulate(ts *totalStatistics, output bool) {
 	ts.upCumulativePercent += ss.cumulativeUpPercent
 	ts.downDays += ss.downDays
 	ts.downCumulativePercent += ss.cumulativeDownPercent
+	if maxNonTradeDuration := p.maxNonTradeDuration[1] - p.maxNonTradeDuration[0]; maxNonTradeDuration > 0 {
+		ts.maxNonTradeDuration = append(ts.maxNonTradeDuration, maxNonTradeDuration)
+		if maxNonTradeDuration >= 28 {
+			panic("here")
+		}
+	}
 	ts.locker.Unlock()
 	ts.wg.Done()
 }
@@ -237,9 +321,9 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	var (
-		output        = true
+		output        = false
 		simulateCount = 100000
-		ss            = &totalStatistics{
+		ts            = &totalStatistics{
 			count:  simulateCount,
 			locker: sync.Mutex{},
 			wg:     sync.WaitGroup{},
@@ -250,17 +334,53 @@ func main() {
 		simulateCount = 1
 	}
 
-	ss.wg.Add(simulateCount)
+	ts.wg.Add(simulateCount)
 
 	for simulateIndex := 0; simulateIndex < simulateCount; simulateIndex++ {
-		go simulate(ss, output)
+		go simulate(ts, output)
 	}
 
-	ss.wg.Wait()
+	ts.wg.Wait()
 
 	fmt.Printf("---------------- simulate statistics ----------------\n")
-	fmt.Printf("simulate: %v\n", ss.count)
-	fmt.Printf("- up: %v times, max %v, days percents %v%%, cumulative %v, avg %v\n", ss.upCount, ss.maxUp, ss.upDays*100/(ss.upDays+ss.downDays), ss.upCumulativePercent, ss.upCumulativePercent/ss.upDays)
-	fmt.Printf("- down: %v times, max %v, days percents %v%%, cumulative %v avg %v\n", ss.downCount, ss.maxDown, ss.downDays*100/(ss.upDays+ss.downDays), ss.downCumulativePercent, ss.downCumulativePercent/ss.downDays)
-	fmt.Printf("- equal: %v\n", ss.equalCount)
+	fmt.Printf("simulate: %v\n", ts.count)
+	fmt.Printf("- up: %v times, max %v, days percents %v%%, cumulative %v, avg %v\n", ts.upCount, ts.maxUp, ts.upDays*100/(ts.upDays+ts.downDays), ts.upCumulativePercent, ts.upCumulativePercent/ts.upDays)
+	fmt.Printf("- down: %v times, max %v, days percents %v%%, cumulative %v avg %v\n", ts.downCount, ts.maxDown, ts.downDays*100/(ts.upDays+ts.downDays), ts.downCumulativePercent, ts.downCumulativePercent/ts.downDays)
+	fmt.Printf("- equal: %v\n", ts.equalCount)
+	s := 0
+	over7DaysNonTradeDurationCount := 0
+	over14DaysNonTradeDurationCount := 0
+	over21DaysNonTradeDurationCount := 0
+	over30DaysNonTradeDurationCount := 0
+	maxNonTradeDuration := 0
+	averageMaxNonTradeDuration := 0
+	for _, d := range ts.maxNonTradeDuration {
+		s += d
+		if 7 <= d && d < 14 {
+			over7DaysNonTradeDurationCount++
+		}
+		if 14 <= d && d < 21 {
+			over14DaysNonTradeDurationCount++
+		}
+		if 21 <= d && d < 30 {
+			over21DaysNonTradeDurationCount++
+		}
+		if 30 <= d {
+			over30DaysNonTradeDurationCount++
+		}
+		if maxNonTradeDuration < d {
+			maxNonTradeDuration = d
+		}
+	}
+	if len(ts.maxNonTradeDuration) > 0 {
+		averageMaxNonTradeDuration = s / len(ts.maxNonTradeDuration)
+	}
+
+	fmt.Printf("- non-trade\n")
+	fmt.Printf("\t- max duration: %v\n", maxNonTradeDuration)
+	fmt.Printf("\t- average duration: %v\n", averageMaxNonTradeDuration)
+	fmt.Printf("\t- over 7 days duration: %v\n", over7DaysNonTradeDurationCount)
+	fmt.Printf("\t- over 14 days duration: %v\n", over14DaysNonTradeDurationCount)
+	fmt.Printf("\t- over 21 days duration: %v\n", over21DaysNonTradeDurationCount)
+	fmt.Printf("\t- over 30 days duration: %v\n", over30DaysNonTradeDurationCount)
 }
