@@ -1,16 +1,20 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"math/rand"
 	"os"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
+	"golang.org/x/exp"
 )
 
 type player struct {
@@ -155,7 +159,7 @@ func (p *player) clear(tradeValue int) {
 	p.holdValue = 0
 }
 
-func simulate(ts *totalStatistics, output bool) {
+func simulate(ts *totalStatistics, output, interactive bool) {
 	var (
 		day        int = 30
 		initValue  int = 10000 // 100.00 * 100
@@ -184,7 +188,16 @@ func simulate(ts *totalStatistics, output bool) {
 				"deltaPercent": {0},
 			},
 		}
+		input = bufio.NewScanner(os.Stdin)
 	)
+
+	if interactive {
+		fmt.Printf("init hold value:")
+		p.holdCount = terminalInput[int](input)
+		p.holdValue = terminalInput[int](input)
+		p.cost = terminalInput[int](input)
+		p.release = terminalInput[int](input)
+	}
 
 	if output {
 		fmt.Printf("---------------- simulate init ----------------\n")
@@ -311,6 +324,28 @@ func simulate(ts *totalStatistics, output bool) {
 	ts.wg.Done()
 }
 
+func terminalInput[T exp.Integer](input *bufio.Scanner) T {
+	var s string
+	if input.Scan() {
+		s = strings.TrimSpace(input.Text())
+	}
+
+	var v T
+	if len(s) == 0 {
+		return v
+	}
+
+	f := func() interface{} {
+		_v, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			panic(err)
+		}
+		return _v
+	}
+
+	return f().(T)
+}
+
 func main() {
 	// for name, code := range global.FundNameCodeMap {
 	// 	date, num := fundeastmoney.GetFundInfoByCode(code)
@@ -322,6 +357,7 @@ func main() {
 
 	var (
 		output        = false
+		interactive   = false
 		simulateCount = 100000
 		ts            = &totalStatistics{
 			count:  simulateCount,
@@ -330,14 +366,14 @@ func main() {
 		}
 	)
 
-	if output {
+	if output || interactive {
 		simulateCount = 1
 	}
 
 	ts.wg.Add(simulateCount)
 
 	for simulateIndex := 0; simulateIndex < simulateCount; simulateIndex++ {
-		go simulate(ts, output)
+		go simulate(ts, output, interactive)
 	}
 
 	ts.wg.Wait()
