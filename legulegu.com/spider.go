@@ -3,30 +3,35 @@ package legulegu
 import (
 	"encoding/json"
 	"os"
+	"time"
 )
 
 type StockData struct {
-	date    int     `json:"date"`
-	open    float32 `json:"open"`
-	close   float32 `json:"close"`
-	high    float32 `json:"high"`
-	low     float32 `json:"low"`
-	volume  float32 `json:"volume"`
-	tVolume float32 `json:"tVolume"`
+	Date    int     `json:"date"`
+	Open    float32 `json:"open"`
+	Close   float32 `json:"close"`
+	High    float32 `json:"high"`
+	Low     float32 `json:"low"`
+	Volume  float32 `json:"volume"`
+	TVolume float32 `json:"tVolume"`
 }
 
-func (sd *StockData) Open() float32 {
-	return sd.open
+func (sd *StockData) DateTime() time.Time {
+	return time.Unix(int64(sd.Date/1000), 0)
 }
 
-func (sd *StockData) Close() float32 {
-	return sd.close
+func (sd *StockData) OpenValue() float32 {
+	return sd.Open
+}
+
+func (sd *StockData) CloseValue() float32 {
+	return sd.Close
 }
 
 type MockData struct {
-	MarketID     string       `json:"marketId"`
-	Name         string       `json:"name"`
-	MockDataList []*StockData `json:"mockDataList"`
+	MarketID      string       `json:"marketId"`
+	Name          string       `json:"name"`
+	MockDataSlice []*StockData `json:"mockDataList"`
 }
 
 func (md *MockData) Parse(p string) {

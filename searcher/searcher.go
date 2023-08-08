@@ -1,10 +1,12 @@
 package searcher
 
+import "time"
+
 // ---------------- search method 1 ----------------
 
 type SearchMethod1Stock interface {
-	Open() float32
-	Close() float32
+	OpenValue() float32
+	CloseValue() float32
 }
 
 type SearchMethod1Result struct {
@@ -27,10 +29,10 @@ func SearchMethod1(stockData []SearchMethod1Stock, delta float32) []*SearchMetho
 			continue
 		}
 		var _delta, _v float32
-		if d1.Close() > d2.Open() {
-			_delta, _v = (d1.Close()/d2.Open()-1)*100, -1
-		} else if d1.Close() < d2.Open() {
-			_delta, _v = (d2.Open()/d1.Close()-1)*100, 1
+		if d1.CloseValue() > d2.OpenValue() {
+			_delta, _v = (d1.CloseValue()/d2.OpenValue()-1)*100, -1
+		} else if d1.CloseValue() < d2.OpenValue() {
+			_delta, _v = (d2.OpenValue()/d1.CloseValue()-1)*100, 1
 		} else {
 			continue
 		}
@@ -44,4 +46,14 @@ func SearchMethod1(stockData []SearchMethod1Stock, delta float32) []*SearchMetho
 		})
 	}
 	return result
+}
+
+// ---------------- search method 2 ----------------
+
+type SearchMethod2Stock interface {
+	DateTime() time.Time
+}
+
+func SearchMethod2(stockData []SearchMethod2Stock) {
+
 }
