@@ -2,12 +2,21 @@ package fundeastmoney
 
 import (
 	"fmt"
+	"go-fund/global"
 	"io/ioutil"
 	"net/http"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
+
+func Spider() {
+	for name, code := range global.FundNameCodeMap {
+		date, num := GetFundInfoByCode(code)
+		pngName := GetFuncChartsByCode(code)
+		fmt.Printf("name %v date %v num %v png %v\n", name, date, num, pngName)
+	}
+}
 
 func GetFundInfoByCode(code string) (string, string) {
 	res, err := http.Get(getFundInfoUrlByCode(code))
