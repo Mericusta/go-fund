@@ -34,6 +34,10 @@ type MockData struct {
 	MockDataSlice []*StockData `json:"mockDataList"`
 }
 
+func NewMockData() *MockData {
+	return &MockData{}
+}
+
 func (md *MockData) Parse(p string) {
 	c, e := os.ReadFile(p)
 	if e != nil {
