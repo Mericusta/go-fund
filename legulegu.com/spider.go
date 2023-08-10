@@ -2,8 +2,14 @@ package legulegu
 
 import (
 	"encoding/json"
+	"go-fund/global"
 	"os"
+	"path/filepath"
 	"time"
+)
+
+var (
+	resourceRelativePath string = "markdown/note/stock"
 )
 
 type StockData struct {
@@ -39,7 +45,7 @@ func NewMockData() *MockData {
 }
 
 func (md *MockData) Parse(p string) {
-	c, e := os.ReadFile(p)
+	c, e := os.ReadFile(filepath.Join(global.PersonalDocumentPath, resourceRelativePath, p))
 	if e != nil {
 		panic(e)
 	}

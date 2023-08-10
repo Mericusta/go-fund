@@ -1,8 +1,11 @@
 package global
 
+import "os"
+
 var (
-	FundNameCodeMap map[string]string
-	FundCodeNameMap map[string]string
+	PersonalDocumentPath string = os.Getenv("PD")
+	FundNameCodeMap      map[string]string
+	FundCodeNameMap      map[string]string
 )
 
 func init() {
