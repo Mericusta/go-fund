@@ -14,7 +14,7 @@ import (
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/components"
 	"github.com/go-echarts/go-echarts/v2/opts"
-	"golang.org/x/exp"
+	"golang.org/x/exp/constraints"
 )
 
 type player struct {
@@ -324,7 +324,7 @@ func tick(ts *totalStatistics, output, interactive bool) {
 	ts.wg.Done()
 }
 
-func terminalInput[T exp.Integer](input *bufio.Scanner) T {
+func terminalInput[T constraints.Integer](input *bufio.Scanner) T {
 	var s string
 	if input.Scan() {
 		s = strings.TrimSpace(input.Text())

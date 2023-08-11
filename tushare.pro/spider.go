@@ -10,19 +10,16 @@ import (
 	"time"
 
 	"github.com/Mericusta/go-stp"
-	"github.com/go-resty/resty/v2"
 )
 
 var (
 	tokenRelativePath string = "markdown/note/Tushare/token"
 	token             string
 	url               string = "http://api.tushare.pro"
-	client            *resty.Client
 )
 
 func init() {
 	token = LoadToken()
-	client = resty.New()
 	fmt.Printf("tushare.pro token = |%v|\n", token)
 }
 
@@ -83,7 +80,7 @@ func GetDailyData(tsCode string, tradeDate, startDate, endDate int64) []*StockDa
 		Token:   token,
 		Params:  params,
 	}
-	resp, err := client.R().SetBody(req).Post(url)
+	resp, err := global.HTTPClient.R().SetBody(req).Post(url)
 	if err != nil {
 		panic(err)
 	}

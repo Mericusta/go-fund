@@ -1,14 +1,22 @@
 package global
 
-import "os"
+import (
+	"os"
+
+	"github.com/go-resty/resty/v2"
+)
 
 var (
-	PersonalDocumentPath string = os.Getenv("PD")
+	PersonalDocumentPath string
+	HTTPClient           *resty.Client
 	FundNameCodeMap      map[string]string
 	FundCodeNameMap      map[string]string
 )
 
 func init() {
+	PersonalDocumentPath = os.Getenv("PD")
+	HTTPClient = resty.New()
+
 	FundNameCodeMap = make(map[string]string)
 	FundCodeNameMap = make(map[string]string)
 
