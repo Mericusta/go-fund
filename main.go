@@ -1,7 +1,6 @@
 package main
 
 import (
-	appfinanceifengcom "go-fund/app.finance.ifeng.com"
 	"go-fund/legulegu.com"
 	"go-fund/searcher"
 
@@ -9,7 +8,10 @@ import (
 )
 
 func main() {
-	appfinanceifengcom.GetStockList()
+	// stockCodeMap := appfinanceifengcom.GetStockList()
+	// for code, name := range stockCodeMap {
+	// 	fmt.Printf("name %v, code %v\n", name, code)
+	// }
 	// tusharepro.GetDailyData("601688.SH", 0, time.Now().Add(-7*time.Hour*24).Unix(), time.Now().Unix())
 }
 
