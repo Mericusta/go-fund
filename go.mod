@@ -3,7 +3,7 @@ module go-fund
 go 1.18
 
 require (
-	github.com/Mericusta/go-stp v0.7.6
+	github.com/Mericusta/go-stp v0.8.0
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/go-echarts/go-echarts/v2 v2.2.6
 	github.com/go-resty/resty/v2 v2.7.0
