@@ -1,4 +1,4 @@
-package tusharepro
+package tushare
 
 import (
 	"encoding/json"
