@@ -92,5 +92,5 @@ func GetDailyData(tsCode string, tradeDate, startDate, endDate int64) []*StockDa
 		panic(err)
 	}
 
-	return stp.AssignStructMember[StockDailyData](rep.Data.Fields, rep.Data.Items, "json")
+	return stp.ReflectStructValueSlice[StockDailyData](rep.Data.Fields, rep.Data.Items, "json")
 }
