@@ -84,7 +84,10 @@ var (
 	localStockListDataPath string = "../stock_list"
 )
 
-func ConvertStockList(stockNameCodeMap map[string]string) {
+func convertStockSlice(stockNameCodeMap map[string]string) []struct {
+	Code string
+	Name string
+} {
 	if len(stockNameCodeMap) == 0 {
 		stockNameCodeMap = make(map[string]string)
 		stp.ReadFileLineOneByOne(localStockListDataPath, func(s string, i int) bool {
@@ -114,13 +117,26 @@ func ConvertStockList(stockNameCodeMap map[string]string) {
 		})
 	}
 
-	SaveStockList(stockSlice)
+	return stockSlice
 }
 
-func SaveStockList(s []struct {
+func revertStockSlice(slice []struct {
 	Code string
 	Name string
-}) {
+}) map[string]string {
+	stockNameCodeMap := make(map[string]string)
+	for _, s := range slice {
+		stockNameCodeMap[s.Code] = s.Name
+	}
+	return stockNameCodeMap
+}
+
+func SaveStockList(stockNameCodeMap map[string]string) {
+	s := convertStockSlice(stockNameCodeMap)
+	if len(s) != len(stockNameCodeMap) {
+		panic("length not equal")
+	}
+
 	stockListPath := filepath.Join(global.PersonalDocumentPath, stockListRelativePath)
 	if stp.IsExist(stockListPath) {
 		if err := os.Remove(stockListPath); err != nil {
@@ -142,4 +158,26 @@ func SaveStockList(s []struct {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func LoadStockList() map[string]string {
+	stockListPath := filepath.Join(global.PersonalDocumentPath, stockListRelativePath)
+	if !stp.IsExist(stockListPath) {
+		return nil
+	}
+	stockList, err := os.ReadFile(stockListPath)
+	if err != nil {
+		panic(err)
+	}
+
+	slice := make([]struct {
+		Code string
+		Name string
+	}, 0, 8192)
+	err = json.Unmarshal(stockList, &slice)
+	if err != nil {
+		panic(err)
+	}
+
+	return revertStockSlice(slice)
 }

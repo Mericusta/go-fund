@@ -1,18 +1,23 @@
 package main
 
 import (
+	appfinanceifengcom "go-fund/app.finance.ifeng.com"
 	"go-fund/legulegu.com"
 	"go-fund/searcher"
+	"go-fund/tushare.pro"
+	"time"
 
 	"github.com/Mericusta/go-stp"
 )
 
 func main() {
-	// stockCodeMap := appfinanceifengcom.GetStockList()
-	// for code, name := range stockCodeMap {
-	// 	fmt.Printf("name %v, code %v\n", name, code)
-	// }
-	// tushare.GetDailyData("601688.SH", 0, time.Now().Add(-7*time.Hour*24).Unix(), time.Now().Unix())
+	stockCodeMap := appfinanceifengcom.GetStockList()
+	appfinanceifengcom.SaveStockList(stockCodeMap)
+	appfinanceifengcom.LoadStockList()
+
+	dailyData := tushare.GetDailyData("601688.SH", 0, time.Now().AddDate(-1, 0, 0).Unix(), time.Now().Unix())
+	tushare.SaveStockDailyData("601688.SH", dailyData)
+	tushare.LoadStockDailyData("601688.SH")
 }
 
 func search_legulegu() {
