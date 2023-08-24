@@ -85,8 +85,8 @@ var (
 )
 
 func convertStockSlice(stockNameCodeMap map[string]string) []struct {
-	Code string
-	Name string
+	Code string `json:"code"`
+	Name string `json:"name"`
 } {
 	if len(stockNameCodeMap) == 0 {
 		stockNameCodeMap = make(map[string]string)
@@ -104,16 +104,16 @@ func convertStockSlice(stockNameCodeMap map[string]string) []struct {
 	sort.Strings(keySlice)
 
 	stockSlice := make([]struct {
-		Code string
-		Name string
+		Code string `json:"code"`
+		Name string `json:"name"`
 	}, 0, len(stockNameCodeMap))
 	for _, key := range keySlice {
 		stockSlice = append(stockSlice, struct {
-			Code string
-			Name string
+			Code string `json:"code"`
+			Name string `json:"name"`
 		}{
-			Code: stockNameCodeMap[key],
-			Name: key,
+			Code: key,
+			Name: stockNameCodeMap[key],
 		})
 	}
 
@@ -121,8 +121,8 @@ func convertStockSlice(stockNameCodeMap map[string]string) []struct {
 }
 
 func revertStockSlice(slice []struct {
-	Code string
-	Name string
+	Code string `json:"code"`
+	Name string `json:"name"`
 }) map[string]string {
 	stockNameCodeMap := make(map[string]string)
 	for _, s := range slice {
@@ -171,8 +171,8 @@ func LoadStockList() map[string]string {
 	}
 
 	slice := make([]struct {
-		Code string
-		Name string
+		Code string `json:"code"`
+		Name string `json:"name"`
 	}, 0, 8192)
 	err = json.Unmarshal(stockList, &slice)
 	if err != nil {

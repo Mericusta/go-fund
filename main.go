@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	appfinanceifengcom "go-fund/app.finance.ifeng.com"
+	"go-fund/filter"
 	"go-fund/legulegu.com"
 	"go-fund/searcher"
 	"go-fund/tushare.pro"
@@ -11,13 +13,33 @@ import (
 )
 
 func main() {
-	stockCodeMap := appfinanceifengcom.GetStockList()
-	appfinanceifengcom.SaveStockList(stockCodeMap)
-	appfinanceifengcom.LoadStockList()
+	// ---------------- stock list ----------------
+	// fmt.Printf("spider stock list\n")
+	// stockCodeMap := appfinanceifengcom.GetStockList()
+	// fmt.Printf("save stock list\n")
+	// appfinanceifengcom.SaveStockList(stockCodeMap)
 
-	dailyData := tushare.GetDailyData("601688.SH", 0, time.Now().AddDate(-1, 0, 0).Unix(), time.Now().Unix())
-	tushare.SaveStockDailyData("601688.SH", dailyData)
-	tushare.LoadStockDailyData("601688.SH")
+	fmt.Printf("load stock list\n")
+	stockCodeNameMap := appfinanceifengcom.LoadStockList()
+
+	// ---------------- daily data ----------------
+	f := func(stockCodeNameMap map[string]string, suffix string) {
+		for code, name := range stockCodeNameMap {
+			_code := fmt.Sprintf("%v.%v", code, suffix)
+			fmt.Printf("spider stock %v - %v daily data", _code, name)
+			dailyData := tushare.GetDailyData(_code, 0, time.Now().AddDate(-1, 0, 0).Unix(), time.Now().Unix())
+			fmt.Printf("save stock %v - %v daily data", _code, name)
+			tushare.SaveStockDailyData(_code, dailyData)
+			// fmt.Printf("load stock %v - %v daily data", _code, name)
+			// tushare.LoadStockDailyData(_code)
+			time.Sleep(time.Second)
+		}
+	}
+
+	SHStockCodeNameMap, suffix := filter.SH_StockFilter(stockCodeNameMap)
+	f(SHStockCodeNameMap, suffix)
+	SZStockCodeNameMap, suffix := filter.SZ_StockFilter(stockCodeNameMap)
+	f(SZStockCodeNameMap, suffix)
 }
 
 func search_legulegu() {
