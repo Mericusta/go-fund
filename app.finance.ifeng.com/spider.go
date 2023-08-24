@@ -15,9 +15,14 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func GetStockList() map[string]string {
-	urlFormat := "https://app.finance.ifeng.com/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
+var (
+	url string = "https://app.finance.ifeng.com"
+)
 
+func GetStockList() map[string]string {
+	fmt.Printf("- spider get stock list from %v\n", url)
+
+	urlFormat := url + "/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
 	targetHeaderIndexMap := map[string]int{"代码": -1, "名称": -1}
 	targetIndexHeaderMap := map[int]string{}
 	data := make(map[string]string)
@@ -69,13 +74,15 @@ func GetStockList() map[string]string {
 			}
 		})
 
-		fmt.Printf("- handle page %v done, stock count %v\n", page, len(data))
+		fmt.Printf("\t- handle page %v done, stock count %v\n", page, len(data))
 		time.Sleep(time.Second)
 		for header := range targetHeaderIndexMap {
 			targetHeaderIndexMap[header] = -1
 		}
 		targetIndexHeaderMap = make(map[int]string)
 	}
+
+	fmt.Printf("- spider get stock data count %v\n", len(data))
 	return data
 }
 
@@ -132,6 +139,8 @@ func revertStockSlice(slice []struct {
 }
 
 func SaveStockList(stockNameCodeMap map[string]string) {
+	fmt.Printf("- spider save stock list to personal document %v\n", stockListRelativePath)
+
 	s := convertStockSlice(stockNameCodeMap)
 	if len(s) != len(stockNameCodeMap) {
 		panic("length not equal")
@@ -142,6 +151,7 @@ func SaveStockList(stockNameCodeMap map[string]string) {
 		if err := os.Remove(stockListPath); err != nil {
 			panic(err)
 		}
+		fmt.Printf("\t- spider remove old stock list file\n")
 	}
 	stockListFile, err := os.Create(stockListPath)
 	if err != nil {
@@ -161,8 +171,11 @@ func SaveStockList(stockNameCodeMap map[string]string) {
 }
 
 func LoadStockList() map[string]string {
+	fmt.Printf("- spider load stock list from personal document %v\n", stockListRelativePath)
+
 	stockListPath := filepath.Join(global.PersonalDocumentPath, stockListRelativePath)
 	if !stp.IsExist(stockListPath) {
+		fmt.Printf("\t- stock list %v not exists in personal document\n", stockListRelativePath)
 		return nil
 	}
 	stockList, err := os.ReadFile(stockListPath)
