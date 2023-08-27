@@ -10,7 +10,7 @@ type StockDailyData interface {
 	Close() float64
 	High() float64
 	Low() float64
-	Vol() float64
+	Volume() float64
 	Amount() float64
 }
 

@@ -73,12 +73,12 @@ func (sdd *TS_StockDailyData) Date() time.Time {
 	t, _ := time.Parse("20060102", sdd.TS_TradeDate)
 	return t
 }
-func (sdd *TS_StockDailyData) OpenValue() float64  { return sdd.TS_Open }
-func (sdd *TS_StockDailyData) CloseValue() float64 { return sdd.TS_Close }
-func (sdd *TS_StockDailyData) HighValue() float64  { return sdd.TS_High }
-func (sdd *TS_StockDailyData) LowValue() float64   { return sdd.TS_Low }
-func (sdd *TS_StockDailyData) Volume() float64     { return sdd.TS_Vol }
-func (sdd *TS_StockDailyData) Amount() float64     { return sdd.TS_Amount }
+func (sdd *TS_StockDailyData) Open() float64   { return sdd.TS_Open }
+func (sdd *TS_StockDailyData) Close() float64  { return sdd.TS_Close }
+func (sdd *TS_StockDailyData) High() float64   { return sdd.TS_High }
+func (sdd *TS_StockDailyData) Low() float64    { return sdd.TS_Low }
+func (sdd *TS_StockDailyData) Volume() float64 { return sdd.TS_Vol }
+func (sdd *TS_StockDailyData) Amount() float64 { return sdd.TS_Amount }
 
 func GetDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
 	fmt.Printf("\t\t- spider get stock %v - %v daily data\n", code, name)

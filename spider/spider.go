@@ -52,5 +52,15 @@ func downloadStockDailyData(stockCodeNameMap map[string]string, suffix string, b
 }
 
 func LoadStockDailyData(code string, beginDate, endDate time.Time) []searcher.StockDailyData {
-	// tushare.LoadStockDailyData()
+	slice := make([]searcher.StockDailyData, 0, 128)
+	for _, data := range tushare.LoadStockDailyData(code) {
+		tradeDate, err := time.Parse("20060102", data.TS_TradeDate)
+		if err != nil {
+			panic(err)
+		}
+		if tradeDate.After(beginDate) && tradeDate.Before(endDate) {
+			slice = append(slice, data)
+		}
+	}
+	return slice
 }
