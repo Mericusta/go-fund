@@ -4,6 +4,7 @@ import (
 	"fmt"
 	appfinanceifengcom "go-fund/app.finance.ifeng.com"
 	"go-fund/filter"
+	"go-fund/searcher"
 	"go-fund/tushare.pro"
 	"sync"
 	"time"
@@ -103,4 +104,18 @@ func appendStockDailyData(stockCodeNameMap map[string]string, market string) {
 	}
 	wg.Wait()
 	fmt.Printf("- spider append stock daily data done, count %v\n", len(stockCodeNameMap))
+}
+
+func LoadStockDailyData(code string, beginDate, endDate time.Time) []searcher.StockDailyData {
+	slice := make([]searcher.StockDailyData, 0, 128)
+	for _, data := range tushare.LoadStockDailyData(code) {
+		tradeDate, err := time.Parse(tushare.TradeDateLayout, data.TS_TradeDate)
+		if err != nil {
+			panic(err)
+		}
+		if tradeDate.After(beginDate) && tradeDate.Before(endDate) {
+			slice = append(slice, data)
+		}
+	}
+	return slice
 }
