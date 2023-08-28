@@ -20,6 +20,7 @@ var (
 	tokenDataCountLimitForEveryRequest   int    = 6000 // 每次最多6000条数据（23年交易日历史数据）
 	ticker                               time.Ticker
 	tickerRequestCount                   int64
+	TradeDateLayout                      string = strings.Replace(stp.DateLayout, "-", "", -1)
 )
 
 func init() {
@@ -51,6 +52,10 @@ type postResponse struct {
 	} `json:"data"`
 }
 
+func MakeStockTSCode(code, market string) string {
+	return fmt.Sprintf("%v.%v", code, market)
+}
+
 // TS_StockDailyData 字段类型顺序必须和 postResponse.Data.Items 保持一致
 // 实现 searcher.StockDailyData 接口
 type TS_StockDailyData struct {
@@ -70,7 +75,7 @@ type TS_StockDailyData struct {
 func (sdd *TS_StockDailyData) Code() string   { return sdd.TS_Code[:strings.Index(sdd.TS_Code, ".")] }
 func (sdd *TS_StockDailyData) Market() string { return sdd.TS_Code[strings.Index(sdd.TS_Code, ".")+1:] }
 func (sdd *TS_StockDailyData) Date() time.Time {
-	t, _ := time.Parse("20060102", sdd.TS_TradeDate)
+	t, _ := time.Parse(TradeDateLayout, sdd.TS_TradeDate)
 	return t
 }
 func (sdd *TS_StockDailyData) OpenValue() float64  { return sdd.TS_Open }
@@ -86,13 +91,13 @@ func GetDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_
 	params := make(map[string]string)
 	params["ts_code"] = code
 	if tradeDate > 0 {
-		params["trade_date"] = time.Unix(tradeDate, 0).Format("20060102")
+		params["trade_date"] = time.Unix(tradeDate, 0).Format(TradeDateLayout)
 	}
 	if startDate > 0 {
-		params["start_date"] = time.Unix(startDate, 0).Format("20060102")
+		params["start_date"] = time.Unix(startDate, 0).Format(TradeDateLayout)
 	}
 	if endDate > 0 {
-		params["end_date"] = time.Unix(endDate, 0).Format("20060102")
+		params["end_date"] = time.Unix(endDate, 0).Format(TradeDateLayout)
 	}
 
 	req := &postRequest{
@@ -140,6 +145,31 @@ func SaveStockDailyData(code, name string, slice []*TS_StockDailyData) {
 	}
 
 	_, err = stockDailyDataFile.Write(b)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func AppendDailyData(code, name string, slice []*TS_StockDailyData) {
+	fmt.Printf("\t\t- spider append stock %v - %v daily data\n", code, name)
+	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(stockDailyDataRelativePathFormat, code))
+	var _slice []*TS_StockDailyData
+	if stp.IsExist(stockDailyDataPath) {
+		_slice = LoadStockDailyData(code)
+	} else {
+		_, err := os.Create(stockDailyDataPath)
+		if err != nil {
+			panic(err)
+		}
+	}
+	slice = append(slice, _slice...)
+
+	b, err := json.Marshal(slice)
+	if err != nil {
+		panic(err)
+	}
+
+	err = os.WriteFile(stockDailyDataPath, b, 0644)
 	if err != nil {
 		panic(err)
 	}
