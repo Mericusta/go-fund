@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-var (
-	resourceRelativePath string = "markdown/note/stock"
-)
-
 type StockData struct {
 	Date    int     `json:"date"`
 	Open    float32 `json:"open"`
@@ -45,7 +41,7 @@ func NewMockData() *MockData {
 }
 
 func (md *MockData) Parse(p string) {
-	c, e := os.ReadFile(filepath.Join(global.PersonalDocumentPath, resourceRelativePath, p))
+	c, e := os.ReadFile(filepath.Join(global.PersonalDocumentPath, global.StockTradeSimulateRelativePath, p))
 	if e != nil {
 		panic(e)
 	}

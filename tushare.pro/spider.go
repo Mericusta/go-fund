@@ -1,6 +1,7 @@
 package tushare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"go-fund/global"
@@ -13,14 +14,14 @@ import (
 )
 
 var (
-	tokenRelativePath                    string = "markdown/note/Tushare/token"
+	tokenRelativePath                    string = "markdown/note/investment/spider/tushare/token"
 	token                                string
 	url                                  string = "http://api.tushare.pro"
 	tokenRequestTimesLimitForEverySecond int    = 500  // 每分钟最多请求500次
 	tokenDataCountLimitForEveryRequest   int    = 6000 // 每次最多6000条数据（23年交易日历史数据）
 	ticker                               time.Ticker
 	tickerRequestCount                   int64
-	TradeDateLayout                      string = strings.Replace(stp.DateLayout, "-", "", -1)
+	tradeDateLayout                      string = strings.Replace(stp.DateLayout, "-", "", -1)
 )
 
 func init() {
@@ -75,7 +76,7 @@ type TS_StockDailyData struct {
 func (sdd *TS_StockDailyData) Code() string   { return sdd.TS_Code[:strings.Index(sdd.TS_Code, ".")] }
 func (sdd *TS_StockDailyData) Market() string { return sdd.TS_Code[strings.Index(sdd.TS_Code, ".")+1:] }
 func (sdd *TS_StockDailyData) Date() time.Time {
-	t, _ := time.Parse(TradeDateLayout, sdd.TS_TradeDate)
+	t, _ := time.Parse(tradeDateLayout, sdd.TS_TradeDate)
 	return t
 }
 func (sdd *TS_StockDailyData) Open() float64   { return sdd.TS_Open }
@@ -91,42 +92,51 @@ func GetDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_
 	params := make(map[string]string)
 	params["ts_code"] = code
 	if tradeDate > 0 {
-		params["trade_date"] = time.Unix(tradeDate, 0).Format(TradeDateLayout)
+		params["trade_date"] = time.Unix(tradeDate, 0).Format(tradeDateLayout)
 	}
 	if startDate > 0 {
-		params["start_date"] = time.Unix(startDate, 0).Format(TradeDateLayout)
+		params["start_date"] = time.Unix(startDate, 0).Format(tradeDateLayout)
 	}
 	if endDate > 0 {
-		params["end_date"] = time.Unix(endDate, 0).Format(TradeDateLayout)
+		params["end_date"] = time.Unix(endDate, 0).Format(tradeDateLayout)
 	}
 
-	req := &postRequest{
-		ApiName: apiName,
-		Token:   token,
-		Params:  params,
-	}
-	resp, err := global.HTTPClient.R().SetBody(req).Post(url)
-	if err != nil {
-		panic(err)
-	}
+	ctx, canceler := context.WithTimeout(context.Background(), time.Minute)
+	defer canceler()
 
-	content := resp.Body()
+	c := make(chan []byte)
+	go func(ctx context.Context) {
+		req := &postRequest{
+			ApiName: apiName,
+			Token:   token,
+			Params:  params,
+		}
+		resp, err := global.HTTPClient.R().SetBody(req).Post(url)
+		if err != nil {
+			panic(err)
+		}
+		content := resp.Body()
+		c <- content
+	}(ctx)
+
 	rep := &postResponse{}
-	err = json.Unmarshal(content, rep)
-	if err != nil {
-		panic(err)
+	overtime := time.NewTimer(time.Minute)
+	select {
+	case <-overtime.C:
+		return nil
+	case content := <-c:
+		err := json.Unmarshal(content, rep)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return stp.ReflectStructValueSlice[TS_StockDailyData](rep.Data.Fields, rep.Data.Items, "json")
 }
 
-var (
-	stockDailyDataRelativePathFormat string = "markdown/note/stock/daily/%v.json"
-)
-
 func SaveStockDailyData(code, name string, slice []*TS_StockDailyData) {
 	fmt.Printf("\t\t- spider save stock %v - %v daily data\n", code, name)
-	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(stockDailyDataRelativePathFormat, code))
+	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
 	if stp.IsExist(stockDailyDataPath) {
 		if err := os.Remove(stockDailyDataPath); err != nil {
 			panic(err)
@@ -152,7 +162,7 @@ func SaveStockDailyData(code, name string, slice []*TS_StockDailyData) {
 
 func AppendDailyData(code, name string, slice []*TS_StockDailyData) {
 	fmt.Printf("\t\t- spider append stock %v - %v daily data\n", code, name)
-	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(stockDailyDataRelativePathFormat, code))
+	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
 	var _slice []*TS_StockDailyData
 	if stp.IsExist(stockDailyDataPath) {
 		_slice = LoadStockDailyData(code)
@@ -176,7 +186,7 @@ func AppendDailyData(code, name string, slice []*TS_StockDailyData) {
 }
 
 func LoadStockDailyData(code string) []*TS_StockDailyData {
-	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(stockDailyDataRelativePathFormat, code))
+	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
 	if !stp.IsExist(stockDailyDataPath) {
 		return nil
 	}
@@ -192,4 +202,8 @@ func LoadStockDailyData(code string) []*TS_StockDailyData {
 	}
 
 	return slice
+}
+
+func TradeDateLayout() string {
+	return tradeDateLayout
 }

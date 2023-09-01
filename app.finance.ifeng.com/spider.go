@@ -5,30 +5,39 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-fund/global"
+	"go-fund/searcher"
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"time"
 
 	"github.com/Mericusta/go-stp"
 	"github.com/PuerkitoBio/goquery"
 )
 
-var (
-	url string = "https://app.finance.ifeng.com"
+const (
+	url                string = "https://app.finance.ifeng.com"
+	stockListUrlFormat string = url + "/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
 )
 
-func GetStockList() map[string]string {
+type AFI_StockBriefData struct {
+	AFI_Code string `json:"code"`
+	AFI_Name string `json:"name"`
+}
+
+func (sbd *AFI_StockBriefData) Code() string { return sbd.AFI_Code }
+func (sbd *AFI_StockBriefData) Name() string { return sbd.AFI_Name }
+
+func DownloadStockSlice() []searcher.StockBriefData {
 	fmt.Printf("- spider get stock list from %v\n", url)
 
-	urlFormat := url + "/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
 	targetHeaderIndexMap := map[string]int{"代码": -1, "名称": -1}
 	targetIndexHeaderMap := map[int]string{}
-	data := make(map[string]string)
+	codeNameMap := make(map[string]string)
+	AFIStockBriefSlice := make([]*AFI_StockBriefData, 0, 8192)
 
 	for page := 1; true; page++ {
-		url := fmt.Sprintf(urlFormat, page)
+		url := fmt.Sprintf(stockListUrlFormat, page)
 		resp, err := global.HTTPClient.R().Get(url)
 		if err != nil {
 			panic(err)
@@ -69,12 +78,17 @@ func GetStockList() map[string]string {
 							}
 						}
 					})
-					data[code] = name
+					if _, has := codeNameMap[code]; !has {
+						codeNameMap[code] = name
+						AFIStockBriefSlice = append(AFIStockBriefSlice, &AFI_StockBriefData{
+							AFI_Code: code, AFI_Name: name,
+						})
+					}
 				}
 			}
 		})
 
-		fmt.Printf("\t- handle page %v done, stock count %v\n", page, len(data))
+		fmt.Printf("\t- handle page %v done, stock count %v\n", page, len(codeNameMap))
 		time.Sleep(time.Second)
 		for header := range targetHeaderIndexMap {
 			targetHeaderIndexMap[header] = -1
@@ -82,71 +96,43 @@ func GetStockList() map[string]string {
 		targetIndexHeaderMap = make(map[int]string)
 	}
 
-	fmt.Printf("- spider get stock data count %v\n", len(data))
-	return data
+	fmt.Printf("- spider get stock data count %v\n", len(codeNameMap))
+	return revertAFIStockBriefDataSlice(AFIStockBriefSlice)
 }
 
-var (
-	stockListRelativePath  string = "markdown/note/stock/stock_list.json"
-	localStockListDataPath string = "../stock_list"
-)
-
-func convertStockSlice(stockNameCodeMap map[string]string) []struct {
-	Code string `json:"code"`
-	Name string `json:"name"`
-} {
-	if len(stockNameCodeMap) == 0 {
-		stockNameCodeMap = make(map[string]string)
-		stp.ReadFileLineOneByOne(localStockListDataPath, func(s string, i int) bool {
-			slice := strings.Split(s, "|")
-			if len(slice) < 4 {
-				return true
-			}
-			stockNameCodeMap[slice[3]] = slice[1]
-			return true
-		})
+func convertAFIStockBriefDataSlice(stockBriefDataSlice []searcher.StockBriefData) []*AFI_StockBriefData {
+	stockNameBriefMap := make(map[string]searcher.StockBriefData)
+	for _, stockBrief := range stockBriefDataSlice {
+		stockNameBriefMap[stockBrief.Code()] = stockBrief
 	}
-
-	keySlice := stp.Key(stockNameCodeMap)
+	keySlice := stp.Key(stockNameBriefMap)
 	sort.Strings(keySlice)
 
-	stockSlice := make([]struct {
-		Code string `json:"code"`
-		Name string `json:"name"`
-	}, 0, len(stockNameCodeMap))
+	AFIStockBriefDataSlice := make([]*AFI_StockBriefData, 0, len(stockBriefDataSlice))
 	for _, key := range keySlice {
-		stockSlice = append(stockSlice, struct {
-			Code string `json:"code"`
-			Name string `json:"name"`
-		}{
-			Code: key,
-			Name: stockNameCodeMap[key],
-		})
+		AFIStockBriefDataSlice = append(AFIStockBriefDataSlice, stockNameBriefMap[key].(*AFI_StockBriefData))
 	}
 
-	return stockSlice
+	return AFIStockBriefDataSlice
 }
 
-func revertStockSlice(slice []struct {
-	Code string `json:"code"`
-	Name string `json:"name"`
-}) map[string]string {
-	stockNameCodeMap := make(map[string]string)
-	for _, s := range slice {
-		stockNameCodeMap[s.Code] = s.Name
+func revertAFIStockBriefDataSlice(AFIStockBriefSlice []*AFI_StockBriefData) []searcher.StockBriefData {
+	stockBriefDataSlice := make([]searcher.StockBriefData, 0, len(AFIStockBriefSlice))
+	for _, d := range AFIStockBriefSlice {
+		stockBriefDataSlice = append(stockBriefDataSlice, d)
 	}
-	return stockNameCodeMap
+	return stockBriefDataSlice
 }
 
-func SaveStockList(stockNameCodeMap map[string]string) {
-	fmt.Printf("- spider save stock list to personal document %v\n", stockListRelativePath)
+func SaveStockList(stockBriefSlice []searcher.StockBriefData) {
+	fmt.Printf("- spider save stock list to personal document %v\n", global.StockListRelativePath)
 
-	s := convertStockSlice(stockNameCodeMap)
-	if len(s) != len(stockNameCodeMap) {
+	slice := convertAFIStockBriefDataSlice(stockBriefSlice)
+	if len(slice) != len(stockBriefSlice) {
 		panic("length not equal")
 	}
 
-	stockListPath := filepath.Join(global.PersonalDocumentPath, stockListRelativePath)
+	stockListPath := filepath.Join(global.PersonalDocumentPath, global.StockListRelativePath)
 	if stp.IsExist(stockListPath) {
 		if err := os.Remove(stockListPath); err != nil {
 			panic(err)
@@ -159,7 +145,7 @@ func SaveStockList(stockNameCodeMap map[string]string) {
 	}
 	defer stockListFile.Close()
 
-	b, err := json.Marshal(s)
+	b, err := json.Marshal(slice)
 	if err != nil {
 		panic(err)
 	}
@@ -170,12 +156,12 @@ func SaveStockList(stockNameCodeMap map[string]string) {
 	}
 }
 
-func LoadStockList() map[string]string {
-	fmt.Printf("- spider load stock list from personal document %v\n", stockListRelativePath)
+func LoadStockList() []searcher.StockBriefData {
+	fmt.Printf("- spider load stock list from personal document %v\n", global.StockListRelativePath)
 
-	stockListPath := filepath.Join(global.PersonalDocumentPath, stockListRelativePath)
+	stockListPath := filepath.Join(global.PersonalDocumentPath, global.StockListRelativePath)
 	if !stp.IsExist(stockListPath) {
-		fmt.Printf("\t- stock list %v not exists in personal document\n", stockListRelativePath)
+		fmt.Printf("\t- stock list %v not exists in personal document\n", global.StockListRelativePath)
 		return nil
 	}
 	stockList, err := os.ReadFile(stockListPath)
@@ -183,14 +169,11 @@ func LoadStockList() map[string]string {
 		panic(err)
 	}
 
-	slice := make([]struct {
-		Code string `json:"code"`
-		Name string `json:"name"`
-	}, 0, 8192)
+	slice := make([]*AFI_StockBriefData, 0, 8192)
 	err = json.Unmarshal(stockList, &slice)
 	if err != nil {
 		panic(err)
 	}
 
-	return revertStockSlice(slice)
+	return revertAFIStockBriefDataSlice(slice)
 }

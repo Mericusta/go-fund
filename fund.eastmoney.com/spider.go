@@ -2,7 +2,6 @@ package fundeastmoney
 
 import (
 	"fmt"
-	"go-fund/global"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -10,8 +9,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func Spider() {
-	for name, code := range global.FundNameCodeMap {
+func Spider(fundNameCodeMap map[string]string) {
+	for name, code := range fundNameCodeMap {
 		date, num := GetFundInfoByCode(code)
 		pngName := GetFuncChartsByCode(code)
 		fmt.Printf("name %v date %v num %v png %v\n", name, date, num, pngName)

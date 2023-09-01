@@ -1,6 +1,6 @@
 module go-fund
 
-go 1.18
+go 1.20
 
 require (
 	github.com/Mericusta/go-stp v0.8.1

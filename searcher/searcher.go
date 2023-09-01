@@ -2,6 +2,11 @@ package searcher
 
 import "time"
 
+type StockBriefData interface {
+	Code() string
+	Name() string
+}
+
 type StockDailyData interface {
 	Code() string
 	Market() string
@@ -13,5 +18,3 @@ type StockDailyData interface {
 	Volume() float64
 	Amount() float64
 }
-
-// func
