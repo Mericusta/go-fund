@@ -17,7 +17,7 @@ import (
 
 const (
 	url                string = "https://app.finance.ifeng.com"
-	stockListUrlFormat string = url + "/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
+	stockListUrlFormat string = "/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
 )
 
 type AFI_StockBriefData struct {
@@ -29,7 +29,7 @@ func (sbd *AFI_StockBriefData) Code() string { return sbd.AFI_Code }
 func (sbd *AFI_StockBriefData) Name() string { return sbd.AFI_Name }
 
 func DownloadStockSlice() []searcher.StockBriefData {
-	fmt.Printf("- spider get stock list from %v\n", url)
+	fmt.Printf("- spider get stock brief data from %v\n", url)
 
 	targetHeaderIndexMap := map[string]int{"代码": -1, "名称": -1}
 	targetIndexHeaderMap := map[int]string{}
@@ -37,8 +37,8 @@ func DownloadStockSlice() []searcher.StockBriefData {
 	AFIStockBriefSlice := make([]*AFI_StockBriefData, 0, 8192)
 
 	for page := 1; true; page++ {
-		url := fmt.Sprintf(stockListUrlFormat, page)
-		resp, err := global.HTTPClient.R().Get(url)
+		_url := fmt.Sprintf(stockListUrlFormat, page)
+		resp, err := global.HTTPClient.R().Get(_url)
 		if err != nil {
 			panic(err)
 		}
@@ -96,7 +96,7 @@ func DownloadStockSlice() []searcher.StockBriefData {
 		targetIndexHeaderMap = make(map[int]string)
 	}
 
-	fmt.Printf("- spider get stock data count %v\n", len(codeNameMap))
+	fmt.Printf("- spider get stock brief data count %v\n", len(codeNameMap))
 	return revertAFIStockBriefDataSlice(AFIStockBriefSlice)
 }
 
@@ -125,7 +125,7 @@ func revertAFIStockBriefDataSlice(AFIStockBriefSlice []*AFI_StockBriefData) []se
 }
 
 func SaveStockList(stockBriefSlice []searcher.StockBriefData) {
-	fmt.Printf("- spider save stock list to personal document %v\n", global.StockListRelativePath)
+	fmt.Printf("- spider save stock brief data to personal document %v\n", global.StockListRelativePath)
 
 	slice := convertAFIStockBriefDataSlice(stockBriefSlice)
 	if len(slice) != len(stockBriefSlice) {

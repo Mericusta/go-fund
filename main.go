@@ -8,5 +8,6 @@ func main() {
 	// spider.DownloadStockDailyData()
 	// spider.AppendStockDailyData()
 	// spider.ArchiveStockDailyData()
-	spider.LoadStockDailyData()
+	// spider.LoadStockDailyData()
+	spider.DownloadStockETFSlice()
 }

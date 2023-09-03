@@ -1,70 +1,138 @@
 package fundeastmoney
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"time"
+	"go-fund/global"
+	"go-fund/searcher"
+	"os"
+	"path/filepath"
+	"sort"
 
+	"github.com/Mericusta/go-stp"
 	"github.com/PuerkitoBio/goquery"
 )
 
-func Spider(fundNameCodeMap map[string]string) {
-	for name, code := range fundNameCodeMap {
-		date, num := GetFundInfoByCode(code)
-		pngName := GetFuncChartsByCode(code)
-		fmt.Printf("name %v date %v num %v png %v\n", name, date, num, pngName)
-	}
+var (
+	url             string = "http://fund.eastmoney.com"
+	stockETFListUrl string = url + "/cnjy_jzzzl.html"
+)
+
+type FE_StockETFBriefData struct {
+	FE_Code string `json:"code"`
+	FE_Name string `json:"name"`
 }
 
-func GetFundInfoByCode(code string) (string, string) {
-	res, err := http.Get(getFundInfoUrlByCode(code))
+func (sbd *FE_StockETFBriefData) Code() string { return sbd.FE_Code }
+func (sbd *FE_StockETFBriefData) Name() string { return sbd.FE_Name }
+
+func DownloadStockETFSlice() []searcher.StockBriefData {
+	fmt.Printf("- spider get stock ETF brief data from %v\n", url)
+
+	codeNameMap := make(map[string]string)
+	FEStockETFBriefSlice := make([]*FE_StockETFBriefData, 0, 1024)
+
+	resp, err := global.HTTPClient.R().Get(stockETFListUrl)
 	if err != nil {
 		panic(err)
 	}
-	defer res.Body.Close()
+	content := resp.Body()
 
-	if res.StatusCode != http.StatusOK {
-		panic(res.StatusCode)
-	}
-
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	_content, err := stp.ToUtf8[stp.GBK](content)
 	if err != nil {
 		panic(err)
 	}
 
-	dataOfFundNodeSelection := doc.Find(".dataOfFund")
-	date, err := dataOfFundNodeSelection.Find(".dataItem01").Find("#gz_gztime").Html()
+	contentReader := bytes.NewReader(_content)
+	doc, err := goquery.NewDocumentFromReader(contentReader)
 	if err != nil {
 		panic(err)
 	}
-	// fmt.Printf("date %v\n", date)
 
-	num, err := dataOfFundNodeSelection.Find(".dataItem02").Find(".dataNums").Children().First().Html()
-	if err != nil {
-		panic(err)
+	tableNodeTR := doc.Find("#oTable tr[id]")
+	if tableNodeTR.Length() < 1 {
+		panic(tableNodeTR.Length())
 	}
-	// fmt.Printf("num %v\n", num)
-	return date, num
+
+	tableNodeTR.Each(func(i int, s *goquery.Selection) {
+		trNodeCheckbox := s.Find("input[id]")
+		if trNodeCheckbox.Length() < 1 {
+			panic(trNodeCheckbox.Length())
+		}
+		code, has := trNodeCheckbox.Attr("id")
+		if !has {
+			panic(has)
+		}
+		trNodeNobrA := s.Find("nobr").Find("a").Get(0)
+		if trNodeNobrA == nil {
+			panic(trNodeNobrA)
+		}
+		name := trNodeNobrA.FirstChild.Data
+		if _, has := codeNameMap[code]; !has {
+			codeNameMap[code] = name
+			FEStockETFBriefSlice = append(FEStockETFBriefSlice, &FE_StockETFBriefData{
+				FE_Code: code, FE_Name: name,
+			})
+		}
+	})
+
+	fmt.Printf("- spider get stock ETF brief data count %v\n", len(codeNameMap))
+	return revertFEStockETFBriefDataSlice(FEStockETFBriefSlice)
 }
 
-func GetFuncChartsByCode(code string) string {
-	res, err := http.Get(getFundChartUrlByCode(code))
+func convertFEStockETFBriefDataSlice(stockETFBriefDataSlice []searcher.StockBriefData) []*FE_StockETFBriefData {
+	stockETFCodeBriefMap := make(map[string]searcher.StockBriefData)
+	for _, stockETFBrief := range stockETFBriefDataSlice {
+		stockETFCodeBriefMap[stockETFBrief.Code()] = stockETFBrief
+	}
+	keySlice := stp.Key(stockETFCodeBriefMap)
+	sort.Strings(keySlice)
+
+	FEStockBriefDataSlice := make([]*FE_StockETFBriefData, 0, len(stockETFBriefDataSlice))
+	for _, key := range keySlice {
+		FEStockBriefDataSlice = append(FEStockBriefDataSlice, stockETFCodeBriefMap[key].(*FE_StockETFBriefData))
+	}
+
+	return FEStockBriefDataSlice
+}
+
+func revertFEStockETFBriefDataSlice(FEStockBriefSlice []*FE_StockETFBriefData) []searcher.StockBriefData {
+	stockBriefDataSlice := make([]searcher.StockBriefData, 0, len(FEStockBriefSlice))
+	for _, d := range FEStockBriefSlice {
+		stockBriefDataSlice = append(stockBriefDataSlice, d)
+	}
+	return stockBriefDataSlice
+}
+
+func SaveStockETFList(stockETFBriefSlice []searcher.StockBriefData) {
+	fmt.Printf("- spider save stock ETF brief data to personal document %v\n", global.StockETFListRelativePath)
+
+	slice := convertFEStockETFBriefDataSlice(stockETFBriefSlice)
+	if len(slice) != len(stockETFBriefSlice) {
+		panic("length not equal")
+	}
+
+	stockETFListPath := filepath.Join(global.PersonalDocumentPath, global.StockETFListRelativePath)
+	if stp.IsExist(stockETFListPath) {
+		if err := os.Remove(stockETFListPath); err != nil {
+			panic(err)
+		}
+		fmt.Printf("\t- spider remove old stock etf list file\n")
+	}
+	stockETFListFile, err := os.Create(stockETFListPath)
 	if err != nil {
 		panic(err)
 	}
-	defer res.Body.Close()
+	defer stockETFListFile.Close()
 
-	contentBytes, err := ioutil.ReadAll(res.Body)
+	b, err := json.Marshal(slice)
 	if err != nil {
 		panic(err)
 	}
 
-	pngName := fmt.Sprintf("%v_%v.png", code, time.Now().Format("20060102150405"))
-	err = ioutil.WriteFile(pngName, contentBytes, 0644)
+	_, err = stockETFListFile.Write(b)
 	if err != nil {
 		panic(err)
 	}
-
-	return pngName
 }

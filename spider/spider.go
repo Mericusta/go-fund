@@ -7,6 +7,7 @@ import (
 	"fmt"
 	appfinanceifengcom "go-fund/app.finance.ifeng.com"
 	"go-fund/filter"
+	fundeastmoney "go-fund/fund.eastmoney.com"
 	"go-fund/global"
 	"go-fund/searcher"
 	"go-fund/tushare.pro"
@@ -17,6 +18,8 @@ import (
 
 	"github.com/Mericusta/go-stp"
 )
+
+// stock
 
 func DownloadStockBriefData() {
 	stockBriefSlice := appfinanceifengcom.DownloadStockSlice()
@@ -233,4 +236,11 @@ func LoadStockDailyData() {
 	}
 
 	fmt.Printf("stockDailyDataMap = %v\n", stockDailyDataMap)
+}
+
+// stock ETF
+
+func DownloadStockETFSlice() {
+	stockETFBriefSlice := fundeastmoney.DownloadStockETFSlice()
+	fundeastmoney.SaveStockETFList(stockETFBriefSlice)
 }

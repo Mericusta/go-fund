@@ -4,6 +4,7 @@ import "os"
 
 const (
 	StockListRelativePath             string = "markdown/note/investment/stock/data/stock_list.json"
+	StockETFListRelativePath          string = "markdown/note/investment/stock/data/stock_etf_list.json"
 	LocalStockListDataPath            string = "../stock_list"
 	StockDailyDataRelativePathFormat  string = "markdown/note/investment/stock/data/daily/%v.json"
 	StockTradeSimulateRelativePath    string = "markdown/note/investment/stock/trade_simulate"
