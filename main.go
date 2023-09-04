@@ -1,6 +1,8 @@
 package main
 
-import "go-fund/spider"
+import (
+	"go-fund/searcher"
+)
 
 func main() {
 	// spider.DownloadStockBriefData()
@@ -9,5 +11,6 @@ func main() {
 	// spider.AppendStockDailyData()
 	// spider.ArchiveStockDailyData()
 	// spider.LoadStockDailyData()
-	spider.DownloadStockETFSlice()
+	// spider.DownloadStockETFSlice()
+	searcher.SearchAlgorithm1()
 }

@@ -5,10 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-fund/global"
-	"go-fund/searcher"
 	"os"
 	"path/filepath"
-	"sort"
 
 	"github.com/Mericusta/go-stp"
 	"github.com/PuerkitoBio/goquery"
@@ -27,8 +25,8 @@ type FE_StockETFBriefData struct {
 func (sbd *FE_StockETFBriefData) Code() string { return sbd.FE_Code }
 func (sbd *FE_StockETFBriefData) Name() string { return sbd.FE_Name }
 
-func DownloadStockETFSlice() []searcher.StockBriefData {
-	fmt.Printf("- spider get stock ETF brief data from %v\n", url)
+func DownloadStockETFSlice() []*FE_StockETFBriefData {
+	fmt.Printf("- spider download stock ETF brief data from %v\n", url)
 
 	codeNameMap := make(map[string]string)
 	FEStockETFBriefSlice := make([]*FE_StockETFBriefData, 0, 1024)
@@ -77,41 +75,41 @@ func DownloadStockETFSlice() []searcher.StockBriefData {
 		}
 	})
 
-	fmt.Printf("- spider get stock ETF brief data count %v\n", len(codeNameMap))
-	return revertFEStockETFBriefDataSlice(FEStockETFBriefSlice)
+	fmt.Printf("- spider download stock ETF brief data count %v\n", len(codeNameMap))
+	return FEStockETFBriefSlice
 }
 
-func convertFEStockETFBriefDataSlice(stockETFBriefDataSlice []searcher.StockBriefData) []*FE_StockETFBriefData {
-	stockETFCodeBriefMap := make(map[string]searcher.StockBriefData)
-	for _, stockETFBrief := range stockETFBriefDataSlice {
-		stockETFCodeBriefMap[stockETFBrief.Code()] = stockETFBrief
-	}
-	keySlice := stp.Key(stockETFCodeBriefMap)
-	sort.Strings(keySlice)
+// func convertFEStockETFBriefDataSlice(stockETFBriefDataSlice []searcher.StockBriefData) []*FE_StockETFBriefData {
+// 	stockETFCodeBriefMap := make(map[string]searcher.StockBriefData)
+// 	for _, stockETFBrief := range stockETFBriefDataSlice {
+// 		stockETFCodeBriefMap[stockETFBrief.Code()] = stockETFBrief
+// 	}
+// 	keySlice := stp.Key(stockETFCodeBriefMap)
+// 	sort.Strings(keySlice)
 
-	FEStockBriefDataSlice := make([]*FE_StockETFBriefData, 0, len(stockETFBriefDataSlice))
-	for _, key := range keySlice {
-		FEStockBriefDataSlice = append(FEStockBriefDataSlice, stockETFCodeBriefMap[key].(*FE_StockETFBriefData))
-	}
+// 	FEStockBriefDataSlice := make([]*FE_StockETFBriefData, 0, len(stockETFBriefDataSlice))
+// 	for _, key := range keySlice {
+// 		FEStockBriefDataSlice = append(FEStockBriefDataSlice, stockETFCodeBriefMap[key].(*FE_StockETFBriefData))
+// 	}
 
-	return FEStockBriefDataSlice
-}
+// 	return FEStockBriefDataSlice
+// }
 
-func revertFEStockETFBriefDataSlice(FEStockBriefSlice []*FE_StockETFBriefData) []searcher.StockBriefData {
-	stockBriefDataSlice := make([]searcher.StockBriefData, 0, len(FEStockBriefSlice))
-	for _, d := range FEStockBriefSlice {
-		stockBriefDataSlice = append(stockBriefDataSlice, d)
-	}
-	return stockBriefDataSlice
-}
+// func revertFEStockETFBriefDataSlice(FEStockBriefSlice []*FE_StockETFBriefData) []searcher.StockBriefData {
+// 	stockBriefDataSlice := make([]searcher.StockBriefData, 0, len(FEStockBriefSlice))
+// 	for _, d := range FEStockBriefSlice {
+// 		stockBriefDataSlice = append(stockBriefDataSlice, d)
+// 	}
+// 	return stockBriefDataSlice
+// }
 
-func SaveStockETFList(stockETFBriefSlice []searcher.StockBriefData) {
+func SaveStockETFList(stockETFBriefSlice []*FE_StockETFBriefData) {
 	fmt.Printf("- spider save stock ETF brief data to personal document %v\n", global.StockETFListRelativePath)
 
-	slice := convertFEStockETFBriefDataSlice(stockETFBriefSlice)
-	if len(slice) != len(stockETFBriefSlice) {
-		panic("length not equal")
-	}
+	// slice := convertFEStockETFBriefDataSlice(stockETFBriefSlice)
+	// if len(slice) != len(stockETFBriefSlice) {
+	// 	panic("length not equal")
+	// }
 
 	stockETFListPath := filepath.Join(global.PersonalDocumentPath, global.StockETFListRelativePath)
 	if stp.IsExist(stockETFListPath) {
@@ -126,7 +124,7 @@ func SaveStockETFList(stockETFBriefSlice []searcher.StockBriefData) {
 	}
 	defer stockETFListFile.Close()
 
-	b, err := json.Marshal(slice)
+	b, err := json.Marshal(stockETFBriefSlice)
 	if err != nil {
 		panic(err)
 	}
@@ -135,4 +133,26 @@ func SaveStockETFList(stockETFBriefSlice []searcher.StockBriefData) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func LoadStockETFList() []*FE_StockETFBriefData {
+	fmt.Printf("- spider load stock etf brief data from personal document %v\n", global.StockETFListRelativePath)
+
+	stockETFListPath := filepath.Join(global.PersonalDocumentPath, global.StockETFListRelativePath)
+	if !stp.IsExist(stockETFListPath) {
+		fmt.Printf("\t- stock etf brief data file %v not exists in personal document\n", global.StockETFListRelativePath)
+		return nil
+	}
+	stockETFList, err := os.ReadFile(stockETFListPath)
+	if err != nil {
+		panic(err)
+	}
+
+	slice := make([]*FE_StockETFBriefData, 0, 8192)
+	err = json.Unmarshal(stockETFList, &slice)
+	if err != nil {
+		panic(err)
+	}
+
+	return slice
 }

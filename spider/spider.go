@@ -5,12 +5,12 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	appfinanceifengcom "go-fund/app.finance.ifeng.com"
 	"go-fund/filter"
-	fundeastmoney "go-fund/fund.eastmoney.com"
 	"go-fund/global"
-	"go-fund/searcher"
-	"go-fund/tushare.pro"
+	"go-fund/model"
+	appfinanceifengcom "go-fund/spider/app.finance.ifeng.com"
+	fundeastmoney "go-fund/spider/fund.eastmoney.com"
+	"go-fund/spider/tushare.pro"
 	"os"
 	"path/filepath"
 	"sync"
@@ -21,15 +21,19 @@ import (
 
 // stock
 
+// DownloadStockBriefData 下载股票简略数据
 func DownloadStockBriefData() {
 	stockBriefSlice := appfinanceifengcom.DownloadStockSlice()
 	appfinanceifengcom.SaveStockList(stockBriefSlice)
 }
 
+// OutputStockBriefStatistics 输出股票简略数据的统计结果
+// - 沪市股票数量
+// - 深市股票数量
 func OutputStockBriefStatistics() {
-	stockBriefDataSlice := appfinanceifengcom.LoadStockList()
+	stockBriefDataSlice := appfinanceifengcom.LoadStockBriefList()
 	SHStockCount, SZStockCount := 0, 0
-	stp.NewArray(stockBriefDataSlice).ForEach(func(v searcher.StockBriefData, i int) {
+	stp.NewArray(stockBriefDataSlice).ForEach(func(v *appfinanceifengcom.AFI_StockBriefData, i int) {
 		switch {
 		case filter.SH_StockFilter(v.Code()):
 			SHStockCount++
@@ -47,16 +51,17 @@ func OutputStockBriefStatistics() {
 	formatter(filter.SZ_Market, SZStockCount)
 }
 
+// DownloadStockDailyData 下载股票历史每日行情数据
 func DownloadStockDailyData() {
 	beginDate, err := time.Parse(tushare.TradeDateLayout(), global.Date1)
 	if err != nil {
 		panic(err)
 	}
 	endDate := time.Now()
-	stockBriefDataSlice := appfinanceifengcom.LoadStockList()
-	SHStockBriefData := make([]searcher.StockBriefData, 0, len(stockBriefDataSlice)/2)
-	SZStockBriefData := make([]searcher.StockBriefData, 0, len(stockBriefDataSlice)/2)
-	stp.NewArray(stockBriefDataSlice).ForEach(func(v searcher.StockBriefData, i int) {
+	stockBriefDataSlice := appfinanceifengcom.LoadStockBriefList()
+	SHStockBriefData := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	SZStockBriefData := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	stp.NewArray(stockBriefDataSlice).ForEach(func(v *appfinanceifengcom.AFI_StockBriefData, i int) {
 		switch {
 		case filter.SH_StockFilter(v.Code()):
 			SHStockBriefData = append(SHStockBriefData, v)
@@ -68,7 +73,7 @@ func DownloadStockDailyData() {
 	downloadStockDailyData(SZStockBriefData, filter.SZ_Market, beginDate, endDate)
 }
 
-func downloadStockDailyData(stockBriefDataSlice []searcher.StockBriefData, market string, beginDate, endDate time.Time) {
+func downloadStockDailyData(stockBriefDataSlice []model.StockBriefData, market string, beginDate, endDate time.Time) {
 	fmt.Printf("- spider download stock daily data, total %v\n", len(stockBriefDataSlice))
 	fmt.Printf("\t- market: %v\n", market)
 	fmt.Printf("\t- duration: %v ~ %v\n", beginDate.Format(tushare.TradeDateLayout()), endDate.Format(tushare.TradeDateLayout()))
@@ -82,7 +87,7 @@ func downloadStockDailyData(stockBriefDataSlice []searcher.StockBriefData, marke
 					fmt.Printf("\t\t- spider stock %v - %v occurs error: %v\n", c, n, _err)
 				}
 			}()
-			dailyData := tushare.GetDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
+			dailyData := tushare.DownloadDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
 			tushare.SaveStockDailyData(c, n, dailyData)
 			wg.Done()
 		}(_code, _name)
@@ -95,11 +100,12 @@ func downloadStockDailyData(stockBriefDataSlice []searcher.StockBriefData, marke
 	fmt.Printf("- spider download stock daily data done, count %v\n", len(stockBriefDataSlice))
 }
 
+// AppendStockDailyData 根据现有历史每日行情数据追加每日行情数据直至当前时间
 func AppendStockDailyData() {
-	stockBriefDataSlice := appfinanceifengcom.LoadStockList()
-	SHStockBriefData := make([]searcher.StockBriefData, 0, len(stockBriefDataSlice)/2)
-	SZStockBriefData := make([]searcher.StockBriefData, 0, len(stockBriefDataSlice)/2)
-	stp.NewArray(stockBriefDataSlice).ForEach(func(v searcher.StockBriefData, i int) {
+	stockBriefDataSlice := appfinanceifengcom.LoadStockBriefList()
+	SHStockBriefData := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	SZStockBriefData := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	stp.NewArray(stockBriefDataSlice).ForEach(func(v *appfinanceifengcom.AFI_StockBriefData, i int) {
 		switch {
 		case filter.SH_StockFilter(v.Code()):
 			SHStockBriefData = append(SHStockBriefData, v)
@@ -111,7 +117,7 @@ func AppendStockDailyData() {
 	appendStockDailyData(SZStockBriefData, filter.SZ_Market)
 }
 
-func appendStockDailyData(stockBriefDataSlice []searcher.StockBriefData, market string) {
+func appendStockDailyData(stockBriefDataSlice []model.StockBriefData, market string) {
 	fmt.Printf("- spider append stock daily data\n")
 	fmt.Printf("\t- market: %v\n", market)
 	counter, wg := 0, sync.WaitGroup{}
@@ -141,7 +147,7 @@ func appendStockDailyData(stockBriefDataSlice []searcher.StockBriefData, market 
 				beginDate = beginDate.AddDate(0, 0, 1)
 			}
 
-			dailyData := tushare.GetDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
+			dailyData := tushare.DownloadDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
 			dailyData = append(dailyData, _dailyData...)
 			tushare.SaveStockDailyData(c, n, dailyData)
 			wg.Done()
@@ -155,8 +161,9 @@ func appendStockDailyData(stockBriefDataSlice []searcher.StockBriefData, market 
 	fmt.Printf("- spider append stock daily data done, count %v\n", len(stockBriefDataSlice))
 }
 
+// ArchiveStockDailyData 压缩并归档现有历史每日行情数据
 func ArchiveStockDailyData() {
-	stockBriefDataSlice := appfinanceifengcom.LoadStockList()
+	stockBriefDataSlice := appfinanceifengcom.LoadStockBriefList()
 	stockDailyDataArchivePath := filepath.Join(global.PersonalDocumentPath, global.StockDailyDataArchiveRelativePath)
 	if stp.IsExist(stockDailyDataArchivePath) {
 		if err := os.Remove(stockDailyDataArchivePath); err != nil {
@@ -240,6 +247,7 @@ func LoadStockDailyData() {
 
 // stock ETF
 
+// DownloadStockETFSlice 下载场内ETF简略数据
 func DownloadStockETFSlice() {
 	stockETFBriefSlice := fundeastmoney.DownloadStockETFSlice()
 	fundeastmoney.SaveStockETFList(stockETFBriefSlice)

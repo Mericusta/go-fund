@@ -86,8 +86,8 @@ func (sdd *TS_StockDailyData) Low() float64    { return sdd.TS_Low }
 func (sdd *TS_StockDailyData) Volume() float64 { return sdd.TS_Vol }
 func (sdd *TS_StockDailyData) Amount() float64 { return sdd.TS_Amount }
 
-func GetDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
-	fmt.Printf("\t\t- spider get stock %v - %v daily data\n", code, name)
+func DownloadDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
+	fmt.Printf("\t\t- spider download stock %v - %v daily data\n", code, name)
 	apiName := "daily"
 	params := make(map[string]string)
 	params["ts_code"] = code
