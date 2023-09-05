@@ -16,7 +16,7 @@ import (
 func SearchAlgorithm1() {
 	fmt.Printf("- searcher algorithm 1\n")
 	const (
-		level int = 3
+		level int = 5
 	)
 	var (
 		now        string          = time.Now().Format(tushare.TradeDateLayout())

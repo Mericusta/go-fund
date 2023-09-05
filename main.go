@@ -1,8 +1,6 @@
 package main
 
-import (
-	"go-fund/searcher"
-)
+import "go-fund/searcher"
 
 func main() {
 	// spider.DownloadStockBriefData()
