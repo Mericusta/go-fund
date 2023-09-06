@@ -10,5 +10,5 @@ func main() {
 	// spider.ArchiveStockDailyData()
 	// spider.LoadStockDailyData()
 	// spider.DownloadStockETFSlice()
-	searcher.SearchAlgorithm1()
+	searcher.SearchAlgorithm1(3, -1, -1, 0, 0)
 }
