@@ -28,6 +28,12 @@ func SearchAlgorithm1(count, nowOffsetDay, year, month, day int) {
 		reportWG   *sync.WaitGroup = &sync.WaitGroup{}
 		resultChan chan string
 	)
+	diffDay, weekday := -1, time.Now().Weekday()
+	if weekday == 0 {
+		diffDay = -2
+	}
+	end = end.AddDate(0, 0, diffDay)
+	begin = begin.AddDate(0, 0, diffDay)
 	fmt.Printf("\t- statistics count %v\n", count)
 	fmt.Printf("\t- specify trade date %v ~ %v\n", begin.Format(tushare.TradeDateLayout()), end.Format(tushare.TradeDateLayout()))
 
