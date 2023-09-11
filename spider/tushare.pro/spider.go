@@ -26,7 +26,7 @@ var (
 
 func init() {
 	token = LoadToken()
-	fmt.Printf("tushare.pro token = |%v|\n", token)
+	fmt.Printf("- tushare.pro token = |%v|\n", token)
 }
 
 func LoadToken() string {

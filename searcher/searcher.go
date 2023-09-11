@@ -28,9 +28,12 @@ func SearchAlgorithm1(count, nowOffsetDay, year, month, day int) {
 		reportWG   *sync.WaitGroup = &sync.WaitGroup{}
 		resultChan chan string
 	)
-	diffDay, weekday := -1, time.Now().Weekday()
-	if weekday == 0 {
+	diffDay, weekday := 0, time.Now().Weekday()
+	switch weekday {
+	case 0:
 		diffDay = -2
+	case 6:
+		diffDay = -1
 	}
 	end = end.AddDate(0, 0, diffDay)
 	begin = begin.AddDate(0, 0, diffDay)
