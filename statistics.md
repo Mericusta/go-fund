@@ -8,24 +8,57 @@
 - spider append stock daily data done, count 1499
 - searcher algorithm 1
 	- statistics count 3
-	- specify trade date 20220912 ~ 20230912
+	- specify trade date 20220913 ~ 20230913
 - spider load stock brief data from personal document markdown/note/investment/stock/data/stock_list.json
 - search result:
-	- code 600057.SH
-	- code 603069.SH
-	- code 001301.SZ
-	- code 002047.SZ
-	- code 002692.SZ
-	- code 600491.SH
-	- code 600763.SH
-	- code 603098.SH
-	- code 603270.SH
-	- code 603486.SH
-	- code 603275.SH
-	- code 600836.SH
-	- code 603135.SH
-	- code 603882.SH
-	- code 603959.SH
 	- code 000665.SZ
-	- code 600428.SH
+	- code 000012.SZ
+	- code 000735.SZ
+	- code 603990.SH
+	- code 001301.SZ
+	- code 603876.SH
+	- code 003032.SZ
+	- code 002534.SZ
+	- code 600563.SH
+	- code 601877.SH
+	- code 601888.SH
+	- code 601968.SH
+	- code 603063.SH
+	- code 603069.SH
+	- code 603296.SH
+	- code 603098.SH
+	- code 603223.SH
+	- code 603270.SH
+	- code 603275.SH
+	- code 603260.SH
+	- code 603359.SH
+	- code 603363.SH
+	- code 603486.SH
+	- code 603713.SH
+	- code 603799.SH
+	- code 603825.SH
+	- code 600089.SH
+	- code 002692.SZ
+	- code 002291.SZ
+	- code 002312.SZ
+	- code 002047.SZ
+	- code 002352.SZ
+	- code 600491.SH
+	- code 002180.SZ
+	- code 002201.SZ
+	- code 603882.SH
+	- code 002847.SZ
+	- code 603959.SH
+	- code 605117.SH
+	- code 002127.SZ
+	- code 000056.SZ
+	- code 002871.SZ
+	- code 002518.SZ
+	- code 002621.SZ
+	- code 601009.SH
+	- code 003025.SZ
+	- code 603960.SH
+	- code 600929.SH
+	- code 600836.SH
+	- code 600763.SH
 - searcher algorithm 1 done
