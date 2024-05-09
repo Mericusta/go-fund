@@ -21,6 +21,26 @@ import (
 
 // stock
 
+func DownloadStockDailyData(stockBriefDataSlice []model.StockBriefData) {
+	beginDate, err := time.Parse(tushare.TradeDateLayout(), global.Date1)
+	if err != nil {
+		panic(err)
+	}
+	endDate := time.Now()
+	SHStockBriefData := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	SZStockBriefData := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	stp.NewArray(stockBriefDataSlice).ForEach(func(v model.StockBriefData, i int) {
+		switch {
+		case filter.SH_StockFilter(v.Code()):
+			SHStockBriefData = append(SHStockBriefData, v)
+		case filter.SZ_StockFilter(v.Code()):
+			SZStockBriefData = append(SZStockBriefData, v)
+		}
+	})
+	downloadStockDailyData(SHStockBriefData, filter.SH_Market, beginDate, endDate)
+	downloadStockDailyData(SZStockBriefData, filter.SZ_Market, beginDate, endDate)
+}
+
 // DownloadStockBriefData 下载股票简略数据
 func DownloadStockBriefData() {
 	stockBriefSlice := appfinanceifengcom.DownloadStockSlice()
@@ -51,8 +71,8 @@ func OutputStockBriefStatistics() {
 	formatter(filter.SZ_Market, SZStockCount)
 }
 
-// DownloadStockDailyData 下载股票历史每日行情数据
-func DownloadStockDailyData() {
+// DownloadAllStockDailyData 下载股票历史每日行情数据
+func DownloadAllStockDailyData() {
 	beginDate, err := time.Parse(tushare.TradeDateLayout(), global.Date1)
 	if err != nil {
 		panic(err)

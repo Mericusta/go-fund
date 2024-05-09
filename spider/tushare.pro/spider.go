@@ -86,6 +86,52 @@ func (sdd *TS_StockDailyData) Low() float64    { return sdd.TS_Low }
 func (sdd *TS_StockDailyData) Volume() float64 { return sdd.TS_Vol }
 func (sdd *TS_StockDailyData) Amount() float64 { return sdd.TS_Amount }
 
+func DownloadDailyMAData(code, name string, startDate, endDate int64) {
+	fmt.Printf("\t\t- spider download stock %v - %v daily MA data\n", code, name)
+	apiName := "pro_bar"
+	params := make(map[string]string)
+	params["ts_code"] = code
+	if startDate > 0 {
+		params["start_date"] = time.Unix(startDate, 0).Format(tradeDateLayout)
+	}
+	if endDate > 0 {
+		params["end_date"] = time.Unix(endDate, 0).Format(tradeDateLayout)
+	}
+	params["ma"] = "5"
+
+	ctx, canceler := context.WithTimeout(context.Background(), time.Minute)
+	defer canceler()
+
+	c := make(chan []byte)
+	go func(ctx context.Context) {
+		req := &postRequest{
+			ApiName: apiName,
+			Token:   token,
+			Params:  params,
+		}
+		resp, err := global.HTTPClient.R().SetBody(req).Post(url)
+		if err != nil {
+			panic(err)
+		}
+		content := resp.Body()
+		c <- content
+	}(ctx)
+
+	rep := &postResponse{}
+	overtime := time.NewTimer(time.Minute)
+	select {
+	case <-overtime.C:
+		return
+	case content := <-c:
+		err := json.Unmarshal(content, rep)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// return stp.ReflectStructValueSlice[TS_StockDailyData](rep.Data.Fields, rep.Data.Items, "json")
+}
+
 func DownloadDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
 	fmt.Printf("\t\t- spider download stock %v - %v daily data\n", code, name)
 	apiName := "daily"

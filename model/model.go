@@ -3,8 +3,8 @@ package model
 import "time"
 
 type StockBriefData interface {
-	Code() string
 	Name() string
+	Code() string
 }
 
 type StockDailyData interface {
