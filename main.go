@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"go-fund/observer"
-	"go-fund/spider"
+	"go-fund/spider/tushare.pro"
+	"strings"
+	"time"
 )
 
 type tempStock struct {
@@ -35,14 +38,47 @@ var (
 	}
 )
 
-func main() {
+func init() {
 	// 添加待观察股票
 	for _, tempStock := range tempStockList {
-		observer.AppendStockToObserveList(tempStock.name, tempStock.code)
+		observer.AppendStockToObserveStockList(tempStock.name, tempStock.code)
 	}
+}
 
-	// 查找待观察股票的每日数据
-	spider.DownloadStockDailyData(observer.LoadObserveStockBriefList())
+var splitter = func() { fmt.Println(strings.Repeat("-", 64)) }
+
+func main() {
+	// // 清空待观察列表中的股票
+	// observer.ClearObserveStockList()
+
+	// // 添加待观察股票
+	// observer.AppendStockToObserveStockList("海天味业", "603288")
+
+	// splitter()
+
+	// // 下载待观察股票的每日行情数据
+	// beginDate, err := time.Parse(tushare.TradeDateLayout(), global.Date1)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// endDate, err := time.Parse(tushare.TradeDateLayout(), "20240510")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// observer.DownloadObserveStockDailyData(beginDate, endDate)
+
+	splitter()
+
+	// 计算待观察股票的 MA 数据
+	calculateDate, err := time.Parse(tushare.TradeDateLayout(), "20240510")
+	if err != nil {
+		panic(err)
+	}
+	calculateDates := make([]time.Time, 0, 5)
+	for index := 0; index != 5; index++ {
+		calculateDates = append(calculateDates, calculateDate.AddDate(0, 0, -index))
+	}
+	observer.CalculateObserverStockMAData(calculateDates...)
 
 	// 创建日志文件
 	// append := false

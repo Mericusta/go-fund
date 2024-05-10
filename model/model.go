@@ -8,7 +8,7 @@ type StockBriefData interface {
 }
 
 type StockDailyData interface {
-	Code() string
+	StockBriefData
 	Market() string
 	Date() time.Time
 	Open() float64
@@ -17,4 +17,5 @@ type StockDailyData interface {
 	Low() float64
 	Volume() float64
 	Amount() float64
+	ChangePercent() string
 }
