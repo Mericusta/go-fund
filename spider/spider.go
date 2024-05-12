@@ -47,21 +47,63 @@ func MultiDownloadStockDailyData(stockBriefDataSlice []model.StockBriefData, dow
 	// make up stock brief data
 	SHStockBriefDataSlice := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
 	SZStockBriefDataSlice := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	SHETFFundBriefDataSlice := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
+	SZETFFundBriefDataSlice := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
 	stp.NewArray(stockBriefDataSlice).ForEach(func(v model.StockBriefData, i int) {
 		switch {
-		case filter.SH_StockFilter(v.Code()) || filter.SH_ETF_FundFilter(v.Code()):
+		case filter.SH_StockFilter(v.Code()):
 			SHStockBriefDataSlice = append(SHStockBriefDataSlice, v)
-		case filter.SZ_StockFilter(v.Code()) || filter.SZ_ETF_FundFilter(v.Code()):
+		case filter.SZ_StockFilter(v.Code()):
 			SZStockBriefDataSlice = append(SZStockBriefDataSlice, v)
+		case filter.SH_ETF_FundFilter(v.Code()):
+			SHETFFundBriefDataSlice = append(SHETFFundBriefDataSlice, v)
+		case filter.SZ_ETF_FundFilter(v.Code()):
+			SZETFFundBriefDataSlice = append(SZETFFundBriefDataSlice, v)
 		}
 	})
 	// download
 	if len(SHStockBriefDataSlice) > 0 {
-		downloadStockDailyData(SHStockBriefDataSlice, filter.SH_Market, beginDate, endDate)
+		downloadTDailyData(tushare.DownloadStockDailyData, SHStockBriefDataSlice, filter.SH_Market, beginDate, endDate)
 	}
 	if len(SZStockBriefDataSlice) > 0 {
-		downloadStockDailyData(SZStockBriefDataSlice, filter.SZ_Market, beginDate, endDate)
+		downloadTDailyData(tushare.DownloadStockDailyData, SZStockBriefDataSlice, filter.SZ_Market, beginDate, endDate)
 	}
+	if len(SHETFFundBriefDataSlice) > 0 {
+		downloadTDailyData(tushare.DownloadFundDailyData, SHETFFundBriefDataSlice, filter.SH_Market, beginDate, endDate)
+	}
+	if len(SZETFFundBriefDataSlice) > 0 {
+		downloadTDailyData(tushare.DownloadFundDailyData, SZETFFundBriefDataSlice, filter.SZ_Market, beginDate, endDate)
+	}
+}
+
+func downloadTDailyData(
+	downloader func(string, string, int64, int64, int64) []*tushare.TS_StockDailyData,
+	stockBriefDataSlice []model.StockBriefData, market string, beginDate, endDate time.Time,
+) {
+	fmt.Println("\t- spider download daily data in market", filter.SH_Market, "total", len(stockBriefDataSlice))
+	counter, wg := 0, sync.WaitGroup{}
+	wg.Add(len(stockBriefDataSlice))
+	for _, stockBriefData := range stockBriefDataSlice {
+		name, code := stockBriefData.Name(), fmt.Sprintf("%v.%v", stockBriefData.Code(), market)
+		go func(_code, _name string) {
+			defer func() {
+				if err := recover(); err != nil {
+					fmt.Printf("\t\t- spider stock %v - %v occurs error: %v\n", code, name, err)
+				}
+			}()
+			dailyData := downloader(_code, _name, 0, beginDate.Unix(), endDate.Unix())
+			if len(dailyData) > 0 {
+				tushare.SaveDailyData(_code, _name, dailyData)
+			}
+			wg.Done()
+		}(code, name)
+		counter++
+		if counter%5 == 0 {
+			time.Sleep(time.Second)
+		}
+	}
+	wg.Wait()
+	fmt.Println("\t- spider download daily data in market", market, "done, count", len(stockBriefDataSlice))
 }
 
 // downloadStockDailyData 下载股票日行情数据
@@ -77,9 +119,9 @@ func downloadStockDailyData(stockBriefDataSlice []model.StockBriefData, market s
 					fmt.Printf("\t\t- spider stock %v - %v occurs error: %v\n", code, name, err)
 				}
 			}()
-			dailyData := tushare.DownloadDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
+			dailyData := tushare.DownloadStockDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
 			if len(dailyData) > 0 {
-				tushare.SaveStockDailyData(_code, _name, dailyData)
+				tushare.SaveDailyData(_code, _name, dailyData)
 			}
 			wg.Done()
 		}(code, name)
@@ -90,6 +132,33 @@ func downloadStockDailyData(stockBriefDataSlice []model.StockBriefData, market s
 	}
 	wg.Wait()
 	fmt.Println("\t- spider download stock daily data in market", market, "done, count", len(stockBriefDataSlice))
+}
+
+func downloadETFDailyData(etfFundBriefDataSlice []model.StockBriefData, market string, beginDate, endDate time.Time) {
+	fmt.Println("\t- spider download ETF fund daily data in market", market, "total", len(etfFundBriefDataSlice))
+	counter, wg := 0, sync.WaitGroup{}
+	wg.Add(len(etfFundBriefDataSlice))
+	for _, etfFundBriefData := range etfFundBriefDataSlice {
+		name, code := etfFundBriefData.Name(), fmt.Sprintf("%v.%v", etfFundBriefData.Code(), market)
+		go func(_code, _name string) {
+			defer func() {
+				if err := recover(); err != nil {
+					fmt.Printf("\t\t- spider stock %v - %v occurs error: %v\n", code, name, err)
+				}
+			}()
+			dailyData := tushare.DownloadStockDailyData(_code, _name, 0, beginDate.Unix(), endDate.Unix())
+			if len(dailyData) > 0 {
+				tushare.SaveDailyData(_code, _name, dailyData)
+			}
+			wg.Done()
+		}(code, name)
+		counter++
+		if counter%5 == 0 {
+			time.Sleep(time.Second)
+		}
+	}
+	wg.Wait()
+	fmt.Println("\t- spider download stock daily data in market", market, "done, count", len(etfFundBriefDataSlice))
 }
 
 // MultiLoadStockDailyData 批量加载股票日行情数据

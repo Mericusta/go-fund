@@ -93,9 +93,19 @@ func (sdd *TS_StockDailyData) ChangePercent() string {
 	}
 }
 
-func DownloadDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
+func DownloadStockDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
 	fmt.Printf("\t\t- spider download stock %v - %v daily data\n", code, name)
 	apiName := "daily"
+	return downloadDailyData(apiName, code, name, tradeDate, startDate, endDate)
+}
+
+func DownloadFundDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
+	fmt.Printf("\t\t- spider download fund %v - %v daily data\n", code, name)
+	apiName := "fund_daily"
+	return downloadDailyData(apiName, code, name, tradeDate, startDate, endDate)
+}
+
+func downloadDailyData(apiName, code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
 	params := make(map[string]string)
 	params["ts_code"] = code
 	if tradeDate > 0 {
@@ -141,27 +151,27 @@ func DownloadDailyData(code, name string, tradeDate, startDate, endDate int64) [
 	return stp.ReflectStructValueSlice[TS_StockDailyData](rep.Data.Fields, rep.Data.Items, "json")
 }
 
-func SaveStockDailyData(code, name string, slice []*TS_StockDailyData) {
-	fmt.Printf("\t\t- spider save stock %v - %v daily data\n", code, name)
-	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
-	if stp.IsExist(stockDailyDataPath) {
-		if err := os.Remove(stockDailyDataPath); err != nil {
+func SaveDailyData(code, name string, slice []*TS_StockDailyData) {
+	fmt.Printf("\t\t- spider save %v - %v daily data\n", code, name)
+	dailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
+	if stp.IsExist(dailyDataPath) {
+		if err := os.Remove(dailyDataPath); err != nil {
 			panic(err)
 		}
-		fmt.Printf("\t\t- spider remove stock %v - %v daily data\n", code, name)
+		fmt.Printf("\t\t- spider remove %v - %v daily data\n", code, name)
 	}
-	stockDailyDataFile, err := os.Create(stockDailyDataPath)
+	dailyDataFile, err := os.Create(dailyDataPath)
 	if err != nil {
 		panic(err)
 	}
-	defer stockDailyDataFile.Close()
+	defer dailyDataFile.Close()
 
 	b, err := json.Marshal(slice)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = stockDailyDataFile.Write(b)
+	_, err = dailyDataFile.Write(b)
 	if err != nil {
 		panic(err)
 	}
