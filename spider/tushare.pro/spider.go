@@ -85,6 +85,13 @@ func (sdd *TS_StockDailyData) High() float64   { return sdd.TS_High }
 func (sdd *TS_StockDailyData) Low() float64    { return sdd.TS_Low }
 func (sdd *TS_StockDailyData) Volume() float64 { return sdd.TS_Vol }
 func (sdd *TS_StockDailyData) Amount() float64 { return sdd.TS_Amount }
+func (sdd *TS_StockDailyData) ChangePercent() string {
+	if sdd.TS_PctChg >= 0 {
+		return fmt.Sprintf("+%.2f%%", sdd.TS_PctChg)
+	} else {
+		return fmt.Sprintf("%.2f%%", sdd.TS_PctChg)
+	}
+}
 
 func DownloadDailyData(code, name string, tradeDate, startDate, endDate int64) []*TS_StockDailyData {
 	fmt.Printf("\t\t- spider download stock %v - %v daily data\n", code, name)
@@ -160,49 +167,62 @@ func SaveStockDailyData(code, name string, slice []*TS_StockDailyData) {
 	}
 }
 
-func AppendDailyData(code, name string, slice []*TS_StockDailyData) {
-	fmt.Printf("\t\t- spider append stock %v - %v daily data\n", code, name)
+func LoadStockDailyData(code, name string) []*TS_StockDailyData {
 	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
-	var _slice []*TS_StockDailyData
-	if stp.IsExist(stockDailyDataPath) {
-		_slice = LoadStockDailyData(code)
-	} else {
-		_, err := os.Create(stockDailyDataPath)
-		if err != nil {
-			panic(err)
-		}
-	}
-	slice = append(slice, _slice...)
-
-	b, err := json.Marshal(slice)
+	stockDailyData, err := stp.ReadFile(stockDailyDataPath, func(b []byte) ([]*TS_StockDailyData, error) {
+		stockDailyDataSlice := make([]*TS_StockDailyData, 0, 8)
+		err := json.Unmarshal(b, &stockDailyDataSlice)
+		return stockDailyDataSlice, err
+	})
 	if err != nil {
 		panic(err)
 	}
-
-	err = os.WriteFile(stockDailyDataPath, b, 0644)
-	if err != nil {
-		panic(err)
-	}
+	return stockDailyData
 }
 
-func LoadStockDailyData(code string) []*TS_StockDailyData {
-	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
-	if !stp.IsExist(stockDailyDataPath) {
-		return nil
-	}
-	stockDailyData, err := os.ReadFile(stockDailyDataPath)
-	if err != nil {
-		panic(err)
-	}
+// func AppendDailyData(code, name string, slice []*TS_StockDailyData) {
+// 	fmt.Printf("\t\t- spider append stock %v - %v daily data\n", code, name)
+// 	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
+// 	var _slice []*TS_StockDailyData
+// 	if stp.IsExist(stockDailyDataPath) {
+// 		_slice = LoadStockDailyData(code)
+// 	} else {
+// 		_, err := os.Create(stockDailyDataPath)
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 	}
+// 	slice = append(slice, _slice...)
 
-	slice := make([]*TS_StockDailyData, 0, 1024)
-	err = json.Unmarshal(stockDailyData, &slice)
-	if err != nil {
-		panic(err)
-	}
+// 	b, err := json.Marshal(slice)
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	return slice
-}
+// 	err = os.WriteFile(stockDailyDataPath, b, 0644)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
+
+// func LoadStockDailyData(code string) []*TS_StockDailyData {
+// 	stockDailyDataPath := filepath.Join(global.PersonalDocumentPath, fmt.Sprintf(global.StockDailyDataRelativePathFormat, code))
+// 	if !stp.IsExist(stockDailyDataPath) {
+// 		return nil
+// 	}
+// 	stockDailyData, err := os.ReadFile(stockDailyDataPath)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	slice := make([]*TS_StockDailyData, 0, 1024)
+// 	err = json.Unmarshal(stockDailyData, &slice)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	return slice
+// }
 
 func TradeDateLayout() string {
 	return tradeDateLayout

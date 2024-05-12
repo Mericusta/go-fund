@@ -1,415 +1,107 @@
----------------- simulate init ----------------
-player:
-- hold count: 0
-- hold value: 0
-- cost: 0
-- release: 1000000
-- result: 0
----------------- simulating ----------------
----------------- day 0 ----------------
-- info
-	- begin 10000
-	- end 9100
-	- percent -9
-- trade
-	- buy count 10 with value 9100
-- player
-	- hold count 10
-	- hold value 9100
-	- day value 91000
-	- release 909000
-	- cost 91000
----------------- day 1 ----------------
-- info
-	- begin 9100
-	- end 8281
-	- percent -9
-- trade
-	- buy count 10 with value 8281
-- player
-	- hold count 20
-	- hold value 8690
-	- day value 165620
-	- release 826190
-	- cost 173810
----------------- day 2 ----------------
-- info
-	- begin 8281
-	- end 8363
-	- percent 1
-- trade
-	- no trade
-- player
-	- hold count 20
-	- hold value 8690
-	- day value 167260
-	- release 826190
-	- cost 173810
----------------- day 3 ----------------
-- info
-	- begin 8363
-	- end 8530
-	- percent 2
-- trade
-	- no trade
-- player
-	- hold count 20
-	- hold value 8690
-	- day value 170600
-	- release 826190
-	- cost 173810
----------------- day 4 ----------------
-- info
-	- begin 8530
-	- end 8360
-	- percent -2
-- trade
-	- no trade
-- player
-	- hold count 20
-	- hold value 8690
-	- day value 167200
-	- release 826190
-	- cost 173810
----------------- day 5 ----------------
-- info
-	- begin 8360
-	- end 8610
-	- percent 3
-- trade
-	- no trade
-- player
-	- hold count 20
-	- hold value 8690
-	- day value 172200
-	- release 826190
-	- cost 173810
----------------- day 6 ----------------
-- info
-	- begin 8610
-	- end 8266
-	- percent -4
-- trade
-	- no trade
-- player
-	- hold count 20
-	- hold value 8690
-	- day value 165320
-	- release 826190
-	- cost 173810
----------------- day 7 ----------------
-- info
-	- begin 8266
-	- end 9092
-	- percent 10
-- trade
-	- sell count 10 with value 9092
-- player
-	- hold count 10
-	- hold value 8289
-	- day value 90920
-	- release 917110
-	- cost 82890
----------------- day 8 ----------------
-- info
-	- begin 9092
-	- end 8274
-	- percent -9
-- trade
-	- buy count 10 with value 8274
-- player
-	- hold count 20
-	- hold value 8281
-	- day value 165480
-	- release 834370
-	- cost 165630
----------------- day 9 ----------------
-- info
-	- begin 8274
-	- end 7944
-	- percent -4
-- trade
-	- no trade
-- player
-	- hold count 20
-	- hold value 8281
-	- day value 158880
-	- release 834370
-	- cost 165630
----------------- day 10 ----------------
-- info
-	- begin 7944
-	- end 8579
-	- percent 8
-- trade
-	- sell count 10 with value 8579
-- player
-	- hold count 10
-	- hold value 7984
-	- day value 85790
-	- release 920160
-	- cost 79840
----------------- day 11 ----------------
-- info
-	- begin 8579
-	- end 8322
-	- percent -3
-- trade
-	- no trade
-- player
-	- hold count 10
-	- hold value 7984
-	- day value 83220
-	- release 920160
-	- cost 79840
----------------- day 12 ----------------
-- info
-	- begin 8322
-	- end 7990
-	- percent -4
-- trade
-	- no trade
-- player
-	- hold count 10
-	- hold value 7984
-	- day value 79900
-	- release 920160
-	- cost 79840
----------------- day 13 ----------------
-- info
-	- begin 7990
-	- end 7911
-	- percent -1
-- trade
-	- no trade
-- player
-	- hold count 10
-	- hold value 7984
-	- day value 79110
-	- release 920160
-	- cost 79840
----------------- day 14 ----------------
-- info
-	- begin 7911
-	- end 8148
-	- percent 3
-- trade
-	- no trade
-- player
-	- hold count 10
-	- hold value 7984
-	- day value 81480
-	- release 920160
-	- cost 79840
----------------- day 15 ----------------
-- info
-	- begin 8148
-	- end 7741
-	- percent -5
-- trade
-	- buy count 10 with value 7741
-- player
-	- hold count 20
-	- hold value 7862
-	- day value 154820
-	- release 842750
-	- cost 157250
----------------- day 16 ----------------
-- info
-	- begin 7741
-	- end 7200
-	- percent -7
-- trade
-	- buy count 10 with value 7200
-- player
-	- hold count 30
-	- hold value 7641
-	- day value 216000
-	- release 770750
-	- cost 229250
----------------- day 17 ----------------
-- info
-	- begin 7200
-	- end 6912
-	- percent -4
-- trade
-	- no trade
-- player
-	- hold count 30
-	- hold value 7641
-	- day value 207360
-	- release 770750
-	- cost 229250
----------------- day 18 ----------------
-- info
-	- begin 6912
-	- end 6981
-	- percent 1
-- trade
-	- no trade
-- player
-	- hold count 30
-	- hold value 7641
-	- day value 209430
-	- release 770750
-	- cost 229250
----------------- day 19 ----------------
-- info
-	- begin 6981
-	- end 7330
-	- percent 5
-- trade
-	- no trade
-- player
-	- hold count 30
-	- hold value 7641
-	- day value 219900
-	- release 770750
-	- cost 229250
----------------- day 20 ----------------
-- info
-	- begin 7330
-	- end 7403
-	- percent 1
-- trade
-	- no trade
-- player
-	- hold count 30
-	- hold value 7641
-	- day value 222090
-	- release 770750
-	- cost 229250
----------------- day 21 ----------------
-- info
-	- begin 7403
-	- end 6959
-	- percent -6
-- trade
-	- buy count 10 with value 6959
-- player
-	- hold count 40
-	- hold value 7471
-	- day value 278360
-	- release 701160
-	- cost 298840
----------------- day 22 ----------------
-- info
-	- begin 6959
-	- end 6751
-	- percent -3
-- trade
-	- no trade
-- player
-	- hold count 40
-	- hold value 7471
-	- day value 270040
-	- release 701160
-	- cost 298840
----------------- day 23 ----------------
-- info
-	- begin 6751
-	- end 7156
-	- percent 6
-- trade
-	- sell count 10 with value 7156
-- player
-	- hold count 30
-	- hold value 7576
-	- day value 214680
-	- release 772720
-	- cost 227280
----------------- day 24 ----------------
-- info
-	- begin 7156
-	- end 6656
-	- percent -7
-- trade
-	- buy count 10 with value 6656
-- player
-	- hold count 40
-	- hold value 7346
-	- day value 266240
-	- release 706160
-	- cost 293840
----------------- day 25 ----------------
-- info
-	- begin 6656
-	- end 6789
-	- percent 2
-- trade
-	- no trade
-- player
-	- hold count 40
-	- hold value 7346
-	- day value 271560
-	- release 706160
-	- cost 293840
----------------- day 26 ----------------
-- info
-	- begin 6789
-	- end 6314
-	- percent -7
-- trade
-	- buy count 10 with value 6314
-- player
-	- hold count 50
-	- hold value 7139
-	- day value 315700
-	- release 643020
-	- cost 356980
----------------- day 27 ----------------
-- info
-	- begin 6314
-	- end 6566
-	- percent 4
-- trade
-	- no trade
-- player
-	- hold count 50
-	- hold value 7139
-	- day value 328300
-	- release 643020
-	- cost 356980
----------------- day 28 ----------------
-- info
-	- begin 6566
-	- end 6894
-	- percent 5
-- trade
-	- no trade
-- player
-	- hold count 50
-	- hold value 7139
-	- day value 344700
-	- release 643020
-	- cost 356980
----------------- day 29 ----------------
-- info
-	- begin 6894
-	- end 7583
-	- percent 10
-- trade
-	- sell count 10 with value 7583
-- player
-	- hold count 40
-	- hold value 7028
-	- day value 303320
-	- release 718850
-	- cost 281150
----------------- simulate force clear ----------------
----------------- simulate end ----------------
-player:
-- hold count: 0
-- hold value: 0
-- cost: -22170
-- release: 1022170
-- result: 22170
----------------- simulate statistics ----------------
-records: 30 days
-- up: 14 days, 61%
-- down: 16 days, 84%
----------------- simulate statistics ----------------
-simulate: 100000
-- up: 1 times, max 22170, days percents 46%, cumulative 61, avg 4
-- down: 0 times, max 0, days percents 53%, cumulative 84 avg 5
-- equal: 0
+- tushare.pro token = |5b65c030293fd6e1f9386c386f85946e59284bd2e68bc06803caf08f|
+----------------------------------------------------------------
+- observer calculate stock MA data on 20240510
+	- calculate stock 海天味业 MA data Change -0.21% MA/P 20<L<P<10<5<H Table -0.21% | 20<L<P<10<5<H
+	- calculate stock 中科曙光 MA data Change -4.30% MA/P L<P<20<10<5<H Table -4.30% | L<P<20<10<5<H
+	- calculate stock 诺力股份 MA data Change +0.54% MA/P 20<10<L<5<P<H Table +0.54% | 20<10<L<5<P<H
+	- calculate stock 华泰证券 MA data Change +0.58% MA/P 20<L<10<5<P<H Table +0.58% | 20<L<10<5<P<H
+	- calculate stock 中国黄金 MA data Change +0.09% MA/P 20<10<L<5<P<H Table +0.09% | 20<10<L<5<P<H
+	- calculate stock 吉比特 MA data Change -1.58% MA/P 20<10<L<P<5<H Table -1.58% | 20<10<L<P<5<H
+	- calculate stock 贵州茅台 MA data Change -0.97% MA/P 20<10<L<P<5<H Table -0.97% | 20<10<L<P<5<H
+	- calculate stock 创业环保 MA data Change +0.82% MA/P 20<L<10<5<P<H Table +0.82% | 20<L<10<5<P<H
+	- calculate stock 春风动力 MA data Change +4.39% MA/P 20<10<L<5<P<H Table +4.39% | 20<10<L<5<P<H
+	- calculate stock 荣泰健康 MA data Change -0.45% MA/P 20<10<L<P<5<H Table -0.45% | 20<10<L<P<5<H
+	- calculate stock 仙鹤股份 MA data Change +0.20% MA/P 20<10<5<L<P<H Table +0.20% | 20<10<5<L<P<H
+	- calculate stock 老白干酒 MA data Change -0.63% MA/P 20<10<L<P<5<H Table -0.63% | 20<10<L<P<5<H
+	- calculate stock 招商银行 MA data Change +2.24% MA/P 20<10<L<5<P<H Table +2.24% | 20<10<L<5<P<H
+	- calculate stock 建设机械 MA data Change -2.74% MA/P 10<L<5<P<H<20 Table -2.74% | 10<L<5<P<H<20
+	- calculate stock 卫星化学 MA data Change -0.55% MA/P 20<10<L<5<P<H Table -0.55% | 20<10<L<5<P<H
+	- calculate stock 北新建材 MA data Change +1.47% MA/P 20<10<L<5<P<H Table +1.47% | 20<10<L<5<P<H
+	- calculate stock 五粮液 MA data Change -0.26% MA/P 20<10<L<P<5<H Table -0.26% | 20<10<L<P<5<H
+	- calculate stock 双环传动 MA data Change -1.60% MA/P 20<L<10<P<5<H Table -1.60% | 20<L<10<P<5<H
+	- calculate stock 中材科技 MA data Change +1.21% MA/P 10<20<L<5<P<H Table +1.21% | 10<20<L<5<P<H
+	- calculate stock 捷荣技术 MA data Change -3.24% MA/P L<P<10<5<H<20 Table -3.24% | L<P<10<5<H<20
+- observer calculate stock MA data on 20240509
+	- calculate stock 海天味业 MA data Change -0.41% MA/P 20<L<10<P<H<5 Table -0.41% | 20<L<10<P<H<5
+	- calculate stock 中科曙光 MA data Change +0.89% MA/P 20<L<10<P<H<5 Table +0.89% | 20<L<10<P<H<5
+	- calculate stock 诺力股份 MA data Change +3.33% MA/P 10<20<L<5<P<H Table +3.33% | 10<20<L<5<P<H
+	- calculate stock 华泰证券 MA data Change +0.66% MA/P 20<L<10<P<5<H Table +0.66% | 20<L<10<P<5<H
+	- calculate stock 中国黄金 MA data Change +0.35% MA/P 20<10<L<5<P<H Table +0.35% | 20<10<L<5<P<H
+	- calculate stock 吉比特 MA data Change +0.61% MA/P 20<10<L<5<P<H Table +0.61% | 20<10<L<5<P<H
+	- calculate stock 贵州茅台 MA data Change -0.45% MA/P 20<10<L<5<P<H Table -0.45% | 20<10<L<5<P<H
+	- calculate stock 创业环保 MA data Change +1.00% MA/P 20<L<10<5<P<H Table +1.00% | 20<L<10<5<P<H
+	- calculate stock 春风动力 MA data Change +4.16% MA/P 20<10<L<5<P<H Table +4.16% | 20<10<L<5<P<H
+	- calculate stock 荣泰健康 MA data Change +0.49% MA/P 20<10<L<5<P<H Table +0.49% | 20<10<L<5<P<H
+	- calculate stock 仙鹤股份 MA data Change +3.65% MA/P 20<10<5<L<P<H Table +3.65% | 20<10<5<L<P<H
+	- calculate stock 老白干酒 MA data Change -0.18% MA/P 20<10<L<5<P<H Table -0.18% | 20<10<L<5<P<H
+	- calculate stock 招商银行 MA data Change +0.78% MA/P 20<10<L<5<P<H Table +0.78% | 20<10<L<5<P<H
+	- calculate stock 建设机械 MA data Change +6.13% MA/P 10<L<5<20<P<H Table +6.13% | 10<L<5<20<P<H
+	- calculate stock 卫星化学 MA data Change +1.37% MA/P 10<20<L<5<P<H Table +1.37% | 10<20<L<5<P<H
+	- calculate stock 北新建材 MA data Change +0.91% MA/P 20<10<L<5<P<H Table +0.91% | 20<10<L<5<P<H
+	- calculate stock 五粮液 MA data Change -0.10% MA/P 20<10<L<5<P<H Table -0.10% | 20<10<L<5<P<H
+	- calculate stock 双环传动 MA data Change -0.33% MA/P 20<10<L<P<5<H Table -0.33% | 20<10<L<P<5<H
+	- calculate stock 中材科技 MA data Change +2.92% MA/P L<5<10<20<P<H Table +2.92% | L<5<10<20<P<H
+	- calculate stock 捷荣技术 MA data Change +0.21% MA/P L<P<10<5<H<20 Table +0.21% | L<P<10<5<H<20
+- observer calculate stock MA data on 20240508
+	- calculate stock 海天味业 MA data Change -1.61% MA/P 20<10<L<P<5<H Table -1.61% | 20<10<L<P<5<H
+	- calculate stock 中科曙光 MA data Change -0.41% MA/P 10<20<L<P<H<5 Table -0.41% | 10<20<L<P<H<5
+	- calculate stock 诺力股份 MA data Change -0.93% MA/P 10<20<5<L<P<H Table -0.93% | 10<20<5<L<P<H
+	- calculate stock 华泰证券 MA data Change -1.08% MA/P 20<L<P<10<H<5 Table -1.08% | 20<L<P<10<H<5
+	- calculate stock 中国黄金 MA data Change -0.35% MA/P 10<20<L<P<5<H Table -0.35% | 10<20<L<P<5<H
+	- calculate stock 吉比特 MA data Change -1.82% MA/P 20<10<L<P<5<H Table -1.82% | 20<10<L<P<5<H
+	- calculate stock 贵州茅台 MA data Change -0.34% MA/P 20<10<5<L<P<H Table -0.34% | 20<10<5<L<P<H
+	- calculate stock 创业环保 MA data Change -1.48% MA/P 20<10<L<P<5<H Table -1.48% | 20<10<L<P<5<H
+	- calculate stock 春风动力 MA data Change -2.36% MA/P 20<10<5<L<P<H Table -2.36% | 20<10<5<L<P<H
+	- calculate stock 荣泰健康 MA data Change -1.38% MA/P 20<10<5<L<P<H Table -1.38% | 20<10<5<L<P<H
+	- calculate stock 仙鹤股份 MA data Change -2.64% MA/P 20<10<5<L<P<H Table -2.64% | 20<10<5<L<P<H
+	- calculate stock 老白干酒 MA data Change +0.41% MA/P 20<10<5<L<P<H Table +0.41% | 20<10<5<L<P<H
+	- calculate stock 招商银行 MA data Change -0.86% MA/P 20<10<L<P<5<H Table -0.86% | 20<10<L<P<5<H
+	- calculate stock 建设机械 MA data Change -1.90% MA/P 10<5<L<P<H<20 Table -1.90% | 10<5<L<P<H<20
+	- calculate stock 卫星化学 MA data Change +0.30% MA/P 10<20<5<L<P<H Table +0.30% | 10<20<5<L<P<H
+	- calculate stock 北新建材 MA data Change +0.00% MA/P 20<10<L<5<P<H Table +0.00% | 20<10<L<5<P<H
+	- calculate stock 五粮液 MA data Change -0.60% MA/P 20<10<5<L<P<H Table -0.60% | 20<10<5<L<P<H
+	- calculate stock 双环传动 MA data Change -1.09% MA/P 20<10<5<L<P<H Table -1.09% | 20<10<5<L<P<H
+	- calculate stock 中材科技 MA data Change -3.24% MA/P 5<L<P<20<10<H Table -3.24% | 5<L<P<20<10<H
+	- calculate stock 捷荣技术 MA data Change -2.44% MA/P L<10<P<5<20<H Table -2.44% | L<10<P<5<20<H
+- observer calculate stock MA data on 20240507
+	- calculate stock 海天味业 MA data Change +0.13% MA/P 20<10<L<5<P<H Table +0.13% | 20<10<L<5<P<H
+	- calculate stock 中科曙光 MA data Change -1.97% MA/P 10<20<L<P<5<H Table -1.97% | 10<20<L<P<5<H
+	- calculate stock 诺力股份 MA data Change +0.70% MA/P 10<20<5<L<P<H Table +0.70% | 10<20<5<L<P<H
+	- calculate stock 华泰证券 MA data Change -0.14% MA/P 20<10<L<P<H<5 Table -0.14% | 20<10<L<P<H<5
+	- calculate stock 中国黄金 MA data Change +0.27% MA/P 10<20<5<L<P<H Table +0.27% | 10<20<5<L<P<H
+	- calculate stock 吉比特 MA data Change +1.94% MA/P 20<10<5<L<P<H Table +1.94% | 20<10<5<L<P<H
+	- calculate stock 贵州茅台 MA data Change +0.56% MA/P 20<10<5<L<P<H Table +0.56% | 20<10<5<L<P<H
+	- calculate stock 创业环保 MA data Change -0.65% MA/P 20<10<5<L<P<H Table -0.65% | 20<10<5<L<P<H
+	- calculate stock 春风动力 MA data Change +0.67% MA/P 20<10<5<L<P<H Table +0.67% | 20<10<5<L<P<H
+	- calculate stock 荣泰健康 MA data Change +0.82% MA/P 20<10<5<L<P<H Table +0.82% | 20<10<5<L<P<H
+	- calculate stock 仙鹤股份 MA data Change +2.82% MA/P 20<10<5<L<P<H Table +2.82% | 20<10<5<L<P<H
+	- calculate stock 老白干酒 MA data Change -1.16% MA/P 20<10<5<L<P<H Table -1.16% | 20<10<5<L<P<H
+	- calculate stock 招商银行 MA data Change -0.03% MA/P 20<10<L<5<P<H Table -0.03% | 20<10<L<5<P<H
+	- calculate stock 建设机械 MA data Change -1.56% MA/P 10<5<L<P<H<20 Table -1.56% | 10<5<L<P<H<20
+	- calculate stock 卫星化学 MA data Change -0.61% MA/P 10<20<5<L<P<H Table -0.61% | 10<20<5<L<P<H
+	- calculate stock 北新建材 MA data Change -0.06% MA/P 20<10<5<L<P<H Table -0.06% | 20<10<5<L<P<H
+	- calculate stock 五粮液 MA data Change +0.60% MA/P 20<10<5<L<P<H Table +0.60% | 20<10<5<L<P<H
+	- calculate stock 双环传动 MA data Change +0.45% MA/P 20<10<5<L<P<H Table +0.45% | 20<10<5<L<P<H
+	- calculate stock 中材科技 MA data Change +2.65% MA/P 5<L<20<10<P<H Table +2.65% | 5<L<20<10<P<H
+	- calculate stock 捷荣技术 MA data Change -0.32% MA/P 10<L<5<P<20<H Table -0.32% | 10<L<5<P<20<H
+- observer calculate stock MA data on 20240506
+	- calculate stock 海天味业 MA data Change +1.07% MA/P 20<10<5<L<P<H Table +1.07% | 20<10<5<L<P<H
+	- calculate stock 中科曙光 MA data Change -0.99% MA/P 10<20<5<L<P<H Table -0.99% | 10<20<5<L<P<H
+	- calculate stock 诺力股份 MA data Change +2.98% MA/P 10<20<5<L<P<H Table +2.98% | 10<20<5<L<P<H
+	- calculate stock 华泰证券 MA data Change +0.80% MA/P 20<10<L<P<5<H Table +0.80% | 20<10<L<P<5<H
+	- calculate stock 中国黄金 MA data Change +0.89% MA/P 10<20<L<5<P<H Table +0.89% | 10<20<L<5<P<H
+	- calculate stock 吉比特 MA data Change +0.39% MA/P 20<10<5<L<P<H Table +0.39% | 20<10<5<L<P<H
+	- calculate stock 贵州茅台 MA data Change +3.24% MA/P 20<10<5<L<P<H Table +3.24% | 20<10<5<L<P<H
+	- calculate stock 创业环保 MA data Change +2.50% MA/P 20<10<L<5<P<H Table +2.50% | 20<10<L<5<P<H
+	- calculate stock 春风动力 MA data Change +7.26% MA/P 20<L<10<5<P<H Table +7.26% | 20<L<10<5<P<H
+	- calculate stock 荣泰健康 MA data Change +5.03% MA/P 20<L<10<5<P<H Table +5.03% | 20<L<10<5<P<H
+	- calculate stock 仙鹤股份 MA data Change +5.33% MA/P 20<10<L<5<P<H Table +5.33% | 20<10<L<5<P<H
+	- calculate stock 老白干酒 MA data Change +3.56% MA/P 20<10<5<L<P<H Table +3.56% | 20<10<5<L<P<H
+	- calculate stock 招商银行 MA data Change +1.66% MA/P 20<10<5<L<P<H Table +1.66% | 20<10<5<L<P<H
+	- calculate stock 建设机械 MA data Change +9.93% MA/P L<5<10<P<H<20 Table +9.93% | L<5<10<P<H<20
+	- calculate stock 卫星化学 MA data Change +2.70% MA/P L<10<5<20<P<H Table +2.70% | L<10<5<20<P<H
+	- calculate stock 北新建材 MA data Change +0.79% MA/P 20<10<5<L<P<H Table +0.79% | 20<10<5<L<P<H
+	- calculate stock 五粮液 MA data Change +3.04% MA/P 20<10<5<L<P<H Table +3.04% | 20<10<5<L<P<H
+	- calculate stock 双环传动 MA data Change +3.58% MA/P 20<10<5<L<P<H Table +3.58% | 20<10<5<L<P<H
+	- calculate stock 中材科技 MA data Change +4.57% MA/P L<5<P<H<20<10 Table +4.57% | L<5<P<H<20<10
+	- calculate stock 捷荣技术 MA data Change +2.19% MA/P 10<5<L<P<H<20 Table +2.19% | 10<5<L<P<H<20

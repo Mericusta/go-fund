@@ -15,7 +15,7 @@ import (
 
 const (
 	url                string = "https://app.finance.ifeng.com"
-	stockListUrlFormat string = "/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
+	stockListUrlFormat string = "%v/list/stock.php?t=hs&f=chg_pct&o=desc&p=%v"
 )
 
 type AFI_StockBriefData struct {
@@ -35,7 +35,7 @@ func DownloadStockSlice() []*AFI_StockBriefData {
 	AFIStockBriefSlice := make([]*AFI_StockBriefData, 0, 8192)
 
 	for page := 1; true; page++ {
-		_url := fmt.Sprintf(stockListUrlFormat, page)
+		_url := fmt.Sprintf(stockListUrlFormat, url, page)
 		resp, err := global.HTTPClient.R().Get(_url)
 		if err != nil {
 			panic(err)
