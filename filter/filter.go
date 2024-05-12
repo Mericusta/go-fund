@@ -22,6 +22,11 @@ func SH_StockFilter(code string) bool {
 	return rune(code[0]) == '6' && !SSE_StockFilter(code)
 }
 
+// SH_ETF_FundFilter 沪市 ETF 基金
+func SH_ETF_FundFilter(code string) bool {
+	return code[0:2] == "51"
+}
+
 // SSE_StockFilter 沪市科创板股票筛选器
 func SSE_StockFilter(code string) bool {
 	return code[0:3] == "688"
@@ -30,6 +35,11 @@ func SSE_StockFilter(code string) bool {
 // SZ_StockFilter 深市主板股票筛选器
 func SZ_StockFilter(code string) bool {
 	return rune(code[0]) == '0'
+}
+
+// SZ_ETF_FundFilter 深市 ETF 基金
+func SZ_ETF_FundFilter(code string) bool {
+	return code[0:2] == "15"
 }
 
 // GEM_StockFilter 深市创业板股票筛选器

@@ -2,8 +2,6 @@ module go-fund
 
 go 1.22
 
-toolchain go1.22.0
-
 require (
 	github.com/Mericusta/go-stp v0.8.13
 	github.com/PuerkitoBio/goquery v1.8.0

@@ -49,9 +49,9 @@ func MultiDownloadStockDailyData(stockBriefDataSlice []model.StockBriefData, dow
 	SZStockBriefDataSlice := make([]model.StockBriefData, 0, len(stockBriefDataSlice)/2)
 	stp.NewArray(stockBriefDataSlice).ForEach(func(v model.StockBriefData, i int) {
 		switch {
-		case filter.SH_StockFilter(v.Code()):
+		case filter.SH_StockFilter(v.Code()) || filter.SH_ETF_FundFilter(v.Code()):
 			SHStockBriefDataSlice = append(SHStockBriefDataSlice, v)
-		case filter.SZ_StockFilter(v.Code()):
+		case filter.SZ_StockFilter(v.Code()) || filter.SZ_ETF_FundFilter(v.Code()):
 			SZStockBriefDataSlice = append(SZStockBriefDataSlice, v)
 		}
 	})
