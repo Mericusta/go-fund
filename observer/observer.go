@@ -185,6 +185,10 @@ func CalculateObserverStockMAData(calculateDates ...time.Time) {
 			calculateIndex := stp.NewArray(stockDailyData).FindIndex(func(v model.StockDailyData, i int) bool {
 				return v.Date().Format(tushare.TradeDateLayout()) == calculateDate.Format(tushare.TradeDateLayout())
 			})
+			if calculateIndex == -1 {
+				fmt.Println("\t- can not find calculate date daily data", calculateDate.Format(tushare.TradeDateLayout()))
+				return
+			}
 			dailyDataCount := len(stockDailyData)
 			ma5Total, ma10Total, ma20Total := float64(0), float64(0), float64(0)
 			for index := 0; index < 20; index++ {

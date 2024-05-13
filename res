@@ -1,107 +1,91 @@
 - tushare.pro token = |5b65c030293fd6e1f9386c386f85946e59284bd2e68bc06803caf08f|
-----------------------------------------------------------------
-- observer calculate stock MA data on 20240510
-	- calculate stock 海天味业 MA data Change -0.21% MA/P 20<L<P<10<5<H Table -0.21% | 20<L<P<10<5<H
-	- calculate stock 中科曙光 MA data Change -4.30% MA/P L<P<20<10<5<H Table -4.30% | L<P<20<10<5<H
-	- calculate stock 诺力股份 MA data Change +0.54% MA/P 20<10<L<5<P<H Table +0.54% | 20<10<L<5<P<H
-	- calculate stock 华泰证券 MA data Change +0.58% MA/P 20<L<10<5<P<H Table +0.58% | 20<L<10<5<P<H
-	- calculate stock 中国黄金 MA data Change +0.09% MA/P 20<10<L<5<P<H Table +0.09% | 20<10<L<5<P<H
-	- calculate stock 吉比特 MA data Change -1.58% MA/P 20<10<L<P<5<H Table -1.58% | 20<10<L<P<5<H
-	- calculate stock 贵州茅台 MA data Change -0.97% MA/P 20<10<L<P<5<H Table -0.97% | 20<10<L<P<5<H
-	- calculate stock 创业环保 MA data Change +0.82% MA/P 20<L<10<5<P<H Table +0.82% | 20<L<10<5<P<H
-	- calculate stock 春风动力 MA data Change +4.39% MA/P 20<10<L<5<P<H Table +4.39% | 20<10<L<5<P<H
-	- calculate stock 荣泰健康 MA data Change -0.45% MA/P 20<10<L<P<5<H Table -0.45% | 20<10<L<P<5<H
-	- calculate stock 仙鹤股份 MA data Change +0.20% MA/P 20<10<5<L<P<H Table +0.20% | 20<10<5<L<P<H
-	- calculate stock 老白干酒 MA data Change -0.63% MA/P 20<10<L<P<5<H Table -0.63% | 20<10<L<P<5<H
-	- calculate stock 招商银行 MA data Change +2.24% MA/P 20<10<L<5<P<H Table +2.24% | 20<10<L<5<P<H
-	- calculate stock 建设机械 MA data Change -2.74% MA/P 10<L<5<P<H<20 Table -2.74% | 10<L<5<P<H<20
-	- calculate stock 卫星化学 MA data Change -0.55% MA/P 20<10<L<5<P<H Table -0.55% | 20<10<L<5<P<H
-	- calculate stock 北新建材 MA data Change +1.47% MA/P 20<10<L<5<P<H Table +1.47% | 20<10<L<5<P<H
-	- calculate stock 五粮液 MA data Change -0.26% MA/P 20<10<L<P<5<H Table -0.26% | 20<10<L<P<5<H
-	- calculate stock 双环传动 MA data Change -1.60% MA/P 20<L<10<P<5<H Table -1.60% | 20<L<10<P<5<H
-	- calculate stock 中材科技 MA data Change +1.21% MA/P 10<20<L<5<P<H Table +1.21% | 10<20<L<5<P<H
-	- calculate stock 捷荣技术 MA data Change -3.24% MA/P L<P<10<5<H<20 Table -3.24% | L<P<10<5<H<20
-- observer calculate stock MA data on 20240509
-	- calculate stock 海天味业 MA data Change -0.41% MA/P 20<L<10<P<H<5 Table -0.41% | 20<L<10<P<H<5
-	- calculate stock 中科曙光 MA data Change +0.89% MA/P 20<L<10<P<H<5 Table +0.89% | 20<L<10<P<H<5
-	- calculate stock 诺力股份 MA data Change +3.33% MA/P 10<20<L<5<P<H Table +3.33% | 10<20<L<5<P<H
-	- calculate stock 华泰证券 MA data Change +0.66% MA/P 20<L<10<P<5<H Table +0.66% | 20<L<10<P<5<H
-	- calculate stock 中国黄金 MA data Change +0.35% MA/P 20<10<L<5<P<H Table +0.35% | 20<10<L<5<P<H
-	- calculate stock 吉比特 MA data Change +0.61% MA/P 20<10<L<5<P<H Table +0.61% | 20<10<L<5<P<H
-	- calculate stock 贵州茅台 MA data Change -0.45% MA/P 20<10<L<5<P<H Table -0.45% | 20<10<L<5<P<H
-	- calculate stock 创业环保 MA data Change +1.00% MA/P 20<L<10<5<P<H Table +1.00% | 20<L<10<5<P<H
-	- calculate stock 春风动力 MA data Change +4.16% MA/P 20<10<L<5<P<H Table +4.16% | 20<10<L<5<P<H
-	- calculate stock 荣泰健康 MA data Change +0.49% MA/P 20<10<L<5<P<H Table +0.49% | 20<10<L<5<P<H
-	- calculate stock 仙鹤股份 MA data Change +3.65% MA/P 20<10<5<L<P<H Table +3.65% | 20<10<5<L<P<H
-	- calculate stock 老白干酒 MA data Change -0.18% MA/P 20<10<L<5<P<H Table -0.18% | 20<10<L<5<P<H
-	- calculate stock 招商银行 MA data Change +0.78% MA/P 20<10<L<5<P<H Table +0.78% | 20<10<L<5<P<H
-	- calculate stock 建设机械 MA data Change +6.13% MA/P 10<L<5<20<P<H Table +6.13% | 10<L<5<20<P<H
-	- calculate stock 卫星化学 MA data Change +1.37% MA/P 10<20<L<5<P<H Table +1.37% | 10<20<L<5<P<H
-	- calculate stock 北新建材 MA data Change +0.91% MA/P 20<10<L<5<P<H Table +0.91% | 20<10<L<5<P<H
-	- calculate stock 五粮液 MA data Change -0.10% MA/P 20<10<L<5<P<H Table -0.10% | 20<10<L<5<P<H
-	- calculate stock 双环传动 MA data Change -0.33% MA/P 20<10<L<P<5<H Table -0.33% | 20<10<L<P<5<H
-	- calculate stock 中材科技 MA data Change +2.92% MA/P L<5<10<20<P<H Table +2.92% | L<5<10<20<P<H
-	- calculate stock 捷荣技术 MA data Change +0.21% MA/P L<P<10<5<H<20 Table +0.21% | L<P<10<5<H<20
-- observer calculate stock MA data on 20240508
-	- calculate stock 海天味业 MA data Change -1.61% MA/P 20<10<L<P<5<H Table -1.61% | 20<10<L<P<5<H
-	- calculate stock 中科曙光 MA data Change -0.41% MA/P 10<20<L<P<H<5 Table -0.41% | 10<20<L<P<H<5
-	- calculate stock 诺力股份 MA data Change -0.93% MA/P 10<20<5<L<P<H Table -0.93% | 10<20<5<L<P<H
-	- calculate stock 华泰证券 MA data Change -1.08% MA/P 20<L<P<10<H<5 Table -1.08% | 20<L<P<10<H<5
-	- calculate stock 中国黄金 MA data Change -0.35% MA/P 10<20<L<P<5<H Table -0.35% | 10<20<L<P<5<H
-	- calculate stock 吉比特 MA data Change -1.82% MA/P 20<10<L<P<5<H Table -1.82% | 20<10<L<P<5<H
-	- calculate stock 贵州茅台 MA data Change -0.34% MA/P 20<10<5<L<P<H Table -0.34% | 20<10<5<L<P<H
-	- calculate stock 创业环保 MA data Change -1.48% MA/P 20<10<L<P<5<H Table -1.48% | 20<10<L<P<5<H
-	- calculate stock 春风动力 MA data Change -2.36% MA/P 20<10<5<L<P<H Table -2.36% | 20<10<5<L<P<H
-	- calculate stock 荣泰健康 MA data Change -1.38% MA/P 20<10<5<L<P<H Table -1.38% | 20<10<5<L<P<H
-	- calculate stock 仙鹤股份 MA data Change -2.64% MA/P 20<10<5<L<P<H Table -2.64% | 20<10<5<L<P<H
-	- calculate stock 老白干酒 MA data Change +0.41% MA/P 20<10<5<L<P<H Table +0.41% | 20<10<5<L<P<H
-	- calculate stock 招商银行 MA data Change -0.86% MA/P 20<10<L<P<5<H Table -0.86% | 20<10<L<P<5<H
-	- calculate stock 建设机械 MA data Change -1.90% MA/P 10<5<L<P<H<20 Table -1.90% | 10<5<L<P<H<20
-	- calculate stock 卫星化学 MA data Change +0.30% MA/P 10<20<5<L<P<H Table +0.30% | 10<20<5<L<P<H
-	- calculate stock 北新建材 MA data Change +0.00% MA/P 20<10<L<5<P<H Table +0.00% | 20<10<L<5<P<H
-	- calculate stock 五粮液 MA data Change -0.60% MA/P 20<10<5<L<P<H Table -0.60% | 20<10<5<L<P<H
-	- calculate stock 双环传动 MA data Change -1.09% MA/P 20<10<5<L<P<H Table -1.09% | 20<10<5<L<P<H
-	- calculate stock 中材科技 MA data Change -3.24% MA/P 5<L<P<20<10<H Table -3.24% | 5<L<P<20<10<H
-	- calculate stock 捷荣技术 MA data Change -2.44% MA/P L<10<P<5<20<H Table -2.44% | L<10<P<5<20<H
-- observer calculate stock MA data on 20240507
-	- calculate stock 海天味业 MA data Change +0.13% MA/P 20<10<L<5<P<H Table +0.13% | 20<10<L<5<P<H
-	- calculate stock 中科曙光 MA data Change -1.97% MA/P 10<20<L<P<5<H Table -1.97% | 10<20<L<P<5<H
-	- calculate stock 诺力股份 MA data Change +0.70% MA/P 10<20<5<L<P<H Table +0.70% | 10<20<5<L<P<H
-	- calculate stock 华泰证券 MA data Change -0.14% MA/P 20<10<L<P<H<5 Table -0.14% | 20<10<L<P<H<5
-	- calculate stock 中国黄金 MA data Change +0.27% MA/P 10<20<5<L<P<H Table +0.27% | 10<20<5<L<P<H
-	- calculate stock 吉比特 MA data Change +1.94% MA/P 20<10<5<L<P<H Table +1.94% | 20<10<5<L<P<H
-	- calculate stock 贵州茅台 MA data Change +0.56% MA/P 20<10<5<L<P<H Table +0.56% | 20<10<5<L<P<H
-	- calculate stock 创业环保 MA data Change -0.65% MA/P 20<10<5<L<P<H Table -0.65% | 20<10<5<L<P<H
-	- calculate stock 春风动力 MA data Change +0.67% MA/P 20<10<5<L<P<H Table +0.67% | 20<10<5<L<P<H
-	- calculate stock 荣泰健康 MA data Change +0.82% MA/P 20<10<5<L<P<H Table +0.82% | 20<10<5<L<P<H
-	- calculate stock 仙鹤股份 MA data Change +2.82% MA/P 20<10<5<L<P<H Table +2.82% | 20<10<5<L<P<H
-	- calculate stock 老白干酒 MA data Change -1.16% MA/P 20<10<5<L<P<H Table -1.16% | 20<10<5<L<P<H
-	- calculate stock 招商银行 MA data Change -0.03% MA/P 20<10<L<5<P<H Table -0.03% | 20<10<L<5<P<H
-	- calculate stock 建设机械 MA data Change -1.56% MA/P 10<5<L<P<H<20 Table -1.56% | 10<5<L<P<H<20
-	- calculate stock 卫星化学 MA data Change -0.61% MA/P 10<20<5<L<P<H Table -0.61% | 10<20<5<L<P<H
-	- calculate stock 北新建材 MA data Change -0.06% MA/P 20<10<5<L<P<H Table -0.06% | 20<10<5<L<P<H
-	- calculate stock 五粮液 MA data Change +0.60% MA/P 20<10<5<L<P<H Table +0.60% | 20<10<5<L<P<H
-	- calculate stock 双环传动 MA data Change +0.45% MA/P 20<10<5<L<P<H Table +0.45% | 20<10<5<L<P<H
-	- calculate stock 中材科技 MA data Change +2.65% MA/P 5<L<20<10<P<H Table +2.65% | 5<L<20<10<P<H
-	- calculate stock 捷荣技术 MA data Change -0.32% MA/P 10<L<5<P<20<H Table -0.32% | 10<L<5<P<20<H
-- observer calculate stock MA data on 20240506
-	- calculate stock 海天味业 MA data Change +1.07% MA/P 20<10<5<L<P<H Table +1.07% | 20<10<5<L<P<H
-	- calculate stock 中科曙光 MA data Change -0.99% MA/P 10<20<5<L<P<H Table -0.99% | 10<20<5<L<P<H
-	- calculate stock 诺力股份 MA data Change +2.98% MA/P 10<20<5<L<P<H Table +2.98% | 10<20<5<L<P<H
-	- calculate stock 华泰证券 MA data Change +0.80% MA/P 20<10<L<P<5<H Table +0.80% | 20<10<L<P<5<H
-	- calculate stock 中国黄金 MA data Change +0.89% MA/P 10<20<L<5<P<H Table +0.89% | 10<20<L<5<P<H
-	- calculate stock 吉比特 MA data Change +0.39% MA/P 20<10<5<L<P<H Table +0.39% | 20<10<5<L<P<H
-	- calculate stock 贵州茅台 MA data Change +3.24% MA/P 20<10<5<L<P<H Table +3.24% | 20<10<5<L<P<H
-	- calculate stock 创业环保 MA data Change +2.50% MA/P 20<10<L<5<P<H Table +2.50% | 20<10<L<5<P<H
-	- calculate stock 春风动力 MA data Change +7.26% MA/P 20<L<10<5<P<H Table +7.26% | 20<L<10<5<P<H
-	- calculate stock 荣泰健康 MA data Change +5.03% MA/P 20<L<10<5<P<H Table +5.03% | 20<L<10<5<P<H
-	- calculate stock 仙鹤股份 MA data Change +5.33% MA/P 20<10<L<5<P<H Table +5.33% | 20<10<L<5<P<H
-	- calculate stock 老白干酒 MA data Change +3.56% MA/P 20<10<5<L<P<H Table +3.56% | 20<10<5<L<P<H
-	- calculate stock 招商银行 MA data Change +1.66% MA/P 20<10<5<L<P<H Table +1.66% | 20<10<5<L<P<H
-	- calculate stock 建设机械 MA data Change +9.93% MA/P L<5<10<P<H<20 Table +9.93% | L<5<10<P<H<20
-	- calculate stock 卫星化学 MA data Change +2.70% MA/P L<10<5<20<P<H Table +2.70% | L<10<5<20<P<H
-	- calculate stock 北新建材 MA data Change +0.79% MA/P 20<10<5<L<P<H Table +0.79% | 20<10<5<L<P<H
-	- calculate stock 五粮液 MA data Change +3.04% MA/P 20<10<5<L<P<H Table +3.04% | 20<10<5<L<P<H
-	- calculate stock 双环传动 MA data Change +3.58% MA/P 20<10<5<L<P<H Table +3.58% | 20<10<5<L<P<H
-	- calculate stock 中材科技 MA data Change +4.57% MA/P L<5<P<H<20<10 Table +4.57% | L<5<P<H<20<10
-	- calculate stock 捷荣技术 MA data Change +2.19% MA/P 10<5<L<P<H<20 Table +2.19% | 10<5<L<P<H<20
+- spider download stock daily data during 20071016 to 20240513
+	- spider download daily data in market SH total 14
+		- spider download stock 600916.SH - 中国黄金 daily data
+		- spider download stock 603019.SH - 中科曙光 daily data
+		- spider download stock 603288.SH - 海天味业 daily data
+		- spider download stock 603611.SH - 诺力股份 daily data
+		- spider download stock 601688.SH - 华泰证券 daily data
+		- spider save 600916.SH - 中国黄金 daily data
+		- spider remove 600916.SH - 中国黄金 daily data
+		- spider save 603019.SH - 中科曙光 daily data
+		- spider remove 603019.SH - 中科曙光 daily data
+		- spider save 603611.SH - 诺力股份 daily data
+		- spider remove 603611.SH - 诺力股份 daily data
+		- spider save 603288.SH - 海天味业 daily data
+		- spider remove 603288.SH - 海天味业 daily data
+		- spider save 601688.SH - 华泰证券 daily data
+		- spider remove 601688.SH - 华泰证券 daily data
+		- spider download stock 603579.SH - 荣泰健康 daily data
+		- spider download stock 600519.SH - 贵州茅台 daily data
+		- spider download stock 600874.SH - 创业环保 daily data
+		- spider download stock 603444.SH - 吉比特 daily data
+		- spider download stock 603129.SH - 春风动力 daily data
+		- spider save 603444.SH - 吉比特 daily data
+		- spider remove 603444.SH - 吉比特 daily data
+		- spider save 603579.SH - 荣泰健康 daily data
+		- spider remove 603579.SH - 荣泰健康 daily data
+		- spider save 603129.SH - 春风动力 daily data
+		- spider remove 603129.SH - 春风动力 daily data
+		- spider save 600874.SH - 创业环保 daily data
+		- spider remove 600874.SH - 创业环保 daily data
+		- spider save 600519.SH - 贵州茅台 daily data
+		- spider remove 600519.SH - 贵州茅台 daily data
+		- spider download stock 600984.SH - 建设机械 daily data
+		- spider download stock 600559.SH - 老白干酒 daily data
+		- spider download stock 600036.SH - 招商银行 daily data
+		- spider download stock 603733.SH - 仙鹤股份 daily data
+		- spider save 603733.SH - 仙鹤股份 daily data
+		- spider remove 603733.SH - 仙鹤股份 daily data
+		- spider save 600036.SH - 招商银行 daily data
+		- spider remove 600036.SH - 招商银行 daily data
+		- spider save 600559.SH - 老白干酒 daily data
+		- spider remove 600559.SH - 老白干酒 daily data
+		- spider save 600984.SH - 建设机械 daily data
+		- spider remove 600984.SH - 建设机械 daily data
+	- spider download daily data in market SH done, count 14
+	- spider download daily data in market SH total 6
+		- spider download stock 002080.SZ - 中材科技 daily data
+		- spider download stock 000786.SZ - 北新建材 daily data
+		- spider download stock 000858.SZ - 五粮液 daily data
+		- spider download stock 002472.SZ - 双环传动 daily data
+		- spider download stock 002648.SZ - 卫星化学 daily data
+		- spider save 002472.SZ - 双环传动 daily data
+		- spider remove 002472.SZ - 双环传动 daily data
+		- spider save 000786.SZ - 北新建材 daily data
+		- spider remove 000786.SZ - 北新建材 daily data
+		- spider save 002648.SZ - 卫星化学 daily data
+		- spider remove 002648.SZ - 卫星化学 daily data
+		- spider save 002080.SZ - 中材科技 daily data
+		- spider remove 002080.SZ - 中材科技 daily data
+		- spider save 000858.SZ - 五粮液 daily data
+		- spider remove 000858.SZ - 五粮液 daily data
+		- spider download stock 002855.SZ - 捷荣技术 daily data
+		- spider save 002855.SZ - 捷荣技术 daily data
+		- spider remove 002855.SZ - 捷荣技术 daily data
+	- spider download daily data in market SZ done, count 6
+	- spider download daily data in market SH total 2
+		- spider download fund 159941.SZ - 纳指ETF daily data
+		- spider download fund 159509.SZ - 纳指科技ETF daily data
+	- spider download daily data in market SZ done, count 2
+- observer calculate stock MA data on 20240513
+	- calculate stock 海天味业 MA data Change -0.54% MA/P 20<L<P<H<5<10 Table -0.54% | 20<L<P<H<5<10
+	- calculate stock 中科曙光 MA data Change -2.04% MA/P L<P<H<5<20<10 Table -2.04% | L<P<H<5<20<10
+	- calculate stock 诺力股份 MA data Change +1.94% MA/P 20<10<L<5<P<H Table +1.94% | 20<10<L<5<P<H
+	- calculate stock 华泰证券 MA data Change +0.50% MA/P 20<L<5<10<P<H Table +0.50% | 20<L<5<10<P<H
+	- calculate stock 中国黄金 MA data Change -0.18% MA/P 20<10<L<P<5<H Table -0.18% | 20<10<L<P<5<H
+	- calculate stock 吉比特 MA data Change -1.09% MA/P 20<L<P<10<H<5 Table -1.09% | 20<L<P<10<H<5
+	- calculate stock 贵州茅台 MA data Change -1.90% MA/P 20<L<P<10<H<5 Table -1.90% | 20<L<P<10<H<5
+	- calculate stock 创业环保 MA data Change +0.00% MA/P 20<10<L<5<P<H Table +0.00% | 20<10<L<5<P<H
+	- calculate stock 春风动力 MA data Change +3.26% MA/P 20<10<5<L<P<H Table +3.26% | 20<10<5<L<P<H
+	- calculate stock 荣泰健康 MA data Change +0.00% MA/P 20<L<10<P<5<H Table +0.00% | 20<L<10<P<5<H
+	- calculate stock 仙鹤股份 MA data Change -1.10% MA/P 20<10<L<5<P<H Table -1.10% | 20<10<L<5<P<H
+	- calculate stock 老白干酒 MA data Change +1.18% MA/P 20<10<L<5<P<H Table +1.18% | 20<10<L<5<P<H
+	- calculate stock 招商银行 MA data Change +0.81% MA/P 20<10<5<L<P<H Table +0.81% | 20<10<5<L<P<H
+	- calculate stock 建设机械 MA data Change -2.50% MA/P 10<L<P<5<H<20 Table -2.50% | 10<L<P<5<H<20
+	- calculate stock 卫星化学 MA data Change -1.56% MA/P 20<10<L<P<5<H Table -1.56% | 20<10<L<P<5<H
+	- calculate stock 北新建材 MA data Change +0.86% MA/P 20<10<5<L<P<H Table +0.86% | 20<10<5<L<P<H
+	- calculate stock 五粮液 MA data Change -2.16% MA/P 20<L<P<10<H<5 Table -2.16% | 20<L<P<10<H<5
+	- calculate stock 双环传动 MA data Change -1.42% MA/P 20<L<P<H<10<5 Table -1.42% | 20<L<P<H<10<5
+	- calculate stock 中材科技 MA data Change -1.49% MA/P 10<20<L<5<P<H Table -1.49% | 10<20<L<5<P<H
+	- calculate stock 捷荣技术 MA data Change -3.78% MA/P L<P<H<5<10<20 Table -3.78% | L<P<H<5<10<20
