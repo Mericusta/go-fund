@@ -78,6 +78,6 @@ func calculateObserverStockMAData(calculateDateStr string) {
 
 func main() {
 	// initObserver()
-	downloadObserverStockDailyData("20240513")
-	calculateObserverStockMAData("20240513")
+	downloadObserverStockDailyData("20240515")
+	calculateObserverStockMAData("20240515")
 }
