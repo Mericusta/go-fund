@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"go-fund/global"
 	"go-fund/observer"
@@ -9,6 +10,7 @@ import (
 	"time"
 )
 
+var date = flag.String("date", time.Now().Format(tushare.TradeDateLayout()), "spider and calculate date")
 var splitter = func() { fmt.Println(strings.Repeat("-", 64)) }
 
 type tempStock struct {
@@ -42,6 +44,10 @@ var (
 		{name: "纳指ETF", code: "159941"},
 	}
 )
+
+func init() {
+	flag.Parse()
+}
 
 // initObserver 初始化待观察数据
 func initObserver() {
@@ -77,7 +83,6 @@ func calculateObserverStockMAData(calculateDateStr string) {
 }
 
 func main() {
-	// initObserver()
-	downloadObserverStockDailyData("20240515")
-	calculateObserverStockMAData("20240515")
+	downloadObserverStockDailyData(*date)
+	calculateObserverStockMAData(*date)
 }
