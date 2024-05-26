@@ -41,7 +41,8 @@ var (
 		{name: "中材科技", code: "002080"},
 		{name: "捷荣技术", code: "002855"},
 		{name: "纳指科技ETF", code: "159509"},
-		{name: "纳指ETF", code: "159941"},
+		{name: "道琼斯ETF", code: "513400"},
+		{name: "标普ETF", code: "159655"},
 	}
 )
 
