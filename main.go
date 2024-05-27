@@ -20,6 +20,11 @@ type tempStock struct {
 
 var (
 	tempStockList = []tempStock{
+		{name: "百川股份", code: "002455"},
+		{name: "中国石油", code: "601857"},
+		{name: "工业富联", code: "601138"},
+		{name: "英维克", code: "002837"},
+		{name: "立讯精密", code: "002475"},
 		{name: "海天味业", code: "603288"},
 		{name: "中科曙光", code: "603019"},
 		{name: "诺力股份", code: "603611"},
@@ -84,6 +89,7 @@ func calculateObserverStockMAData(calculateDateStr string) {
 }
 
 func main() {
+	// initObserver()
 	downloadObserverStockDailyData(*date)
 	calculateObserverStockMAData(*date)
 }

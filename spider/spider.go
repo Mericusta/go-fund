@@ -7,6 +7,7 @@ import (
 	appfinanceifengcom "go-fund/spider/app.finance.ifeng.com"
 	fundeastmoney "go-fund/spider/fund.eastmoney.com"
 	"go-fund/spider/tushare.pro"
+	"sort"
 	"sync"
 	"time"
 
@@ -182,6 +183,9 @@ func MultiLoadStockDailyData(stockBriefDataSlice []model.StockBriefData) [][]mod
 	if len(SZStockBriefDataSlice) > 0 {
 		stockDailyDataSlice = append(stockDailyDataSlice, loadStockDailyData(SZStockBriefDataSlice, filter.SZ_Market)...)
 	}
+	sort.Slice(stockDailyDataSlice, func(i, j int) bool {
+		return stockDailyDataSlice[i][0].Code() < stockDailyDataSlice[j][0].Code()
+	})
 	return stockDailyDataSlice
 }
 
